@@ -20,12 +20,12 @@ const SERVICES = [
   ['Support &amp; care', 'support-care.html', null],
 ];
 const LINKS = [['Home', 'home'], ['About', 'about'], ['Process', 'process'], ['Any stack', 'stack'], ['Selected works', null], ['Contact', 'contact']];
-// URLs still to be added (each button stays inert until it has one)
+// [label, external URL or null, icon]; a button without a URL stays inert until it has one
 const SOCIALS = [
-  ['LinkedIn', '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5v6M8 7.5v.01M11.5 16.5v-3.5a2.5 2.5 0 0 1 5 0v3.5M11.5 10.5v6"/>'],
-  ['Instagram', '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.3 6.7v.01"/>'],
-  ['GitHub', '<path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>'],
-  ['Email', '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>'],
+  ['LinkedIn', 'https://www.linkedin.com/company/lightgearlab/', '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5v6M8 7.5v.01M11.5 16.5v-3.5a2.5 2.5 0 0 1 5 0v3.5M11.5 10.5v6"/>'],
+  ['Instagram', 'https://www.instagram.com/lightgearlab/', '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.3 6.7v.01"/>'],
+  ['GitHub', 'https://github.com/Lightgearlab', '<path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>'],
+  ['Email', null, '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>'],
 ];
 
 function markup() {
@@ -38,7 +38,7 @@ function markup() {
   }).join('');
   const links = LINKS.map(([t, go]) => (go ? `<a href="#" data-go="${go}">${t}</a>`
     : `<span class="soon" aria-disabled="true">${t}<small>soon</small></span>`)).join('');
-  const soc = SOCIALS.map(([k, svg]) => `<a href="#" aria-label="${k}"${k === 'Email' ? ' data-go="contact"' : ''}><svg viewBox="0 0 24 24">${svg}</svg></a>`).join('');
+  const soc = SOCIALS.map(([k, url, svg]) => `<a href="${url || '#'}" aria-label="${k}"${url ? ' target="_blank" rel="noopener"' : ''}${k === 'Email' ? ' data-go="contact"' : ''}><svg viewBox="0 0 24 24">${svg}</svg></a>`).join('');
   return `
 <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
   <span class="bars" aria-hidden="true"><i></i><i></i></span>
@@ -125,7 +125,7 @@ export function initMenu({ onGo } = {}) {
   window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) closeMenu(); });
   menuEl.addEventListener('click', (e) => {
     const a = e.target.closest('a');
-    if (!a) return;
+    if (!a || a.target === '_blank') return;              // external links (socials) open in a new tab as usual
     e.preventDefault();
     const go = a.dataset.go, href = a.getAttribute('href');
     if (go === 'contact') closeMenu(() => openContact());
