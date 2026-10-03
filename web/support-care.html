@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support &amp; Care — LightGearLab</title>
+<meta name="description" content="Support and care by LightGearLab: SLAs sized to your project, secure deployments, proper handover, and rescue for unfinished or broken projects.">
+<link rel="stylesheet" href="shared/menu.css">
+<link rel="stylesheet" href="shared/page.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+  section { padding: clamp(72px, 8vw, 120px) var(--gut); }
+  .sub { margin-top: 18px; max-width: 56ch; }
+
+  /* hero */
+  #hero { min-height: 82vh; padding-top: 140px; display: grid; grid-template-columns: 1fr auto; gap: clamp(24px, 5vw, 80px); align-items: center; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+  #hero .h { font-size: clamp(44px, 6.4vw, 108px); }
+  #hero .lead { margin-top: 24px; max-width: 46ch; }
+  #hero .btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+  .btn.ghost { background: transparent; border: 1.5px solid var(--ink); }
+  .hero-gear { width: clamp(180px, 22vw, 340px); color: var(--turq); }
+  .hero-gear svg { display: block; width: 100%; }
+
+  /* plans */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.4vw, 28px); margin-top: clamp(32px, 4vw, 56px); }
+  .plan { padding: clamp(24px, 2.6vw, 34px); border-radius: 22px; background: var(--paper-2); display: flex; flex-direction: column; gap: 14px; }
+  .plan:nth-child(2) { background: var(--turq); }
+  .plan:nth-child(3) { background: var(--yellow); }
+  .plan .for { font: 600 11px/1.4 "JetBrains Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+  .plan h3 { font-weight: 800; text-transform: uppercase; font-size: clamp(24px, 2.2vw, 34px); line-height: 1; }
+  .plan p { font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+  .plan:nth-child(2) p { color: rgba(16, 53, 50, 0.85); }
+  .plan ul { list-style: none; display: grid; gap: 9px; margin-top: 4px; }
+  .plan li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; line-height: 1.45; }
+  .plan li .cog-ic { width: 13px; height: 13px; flex: none; transform: translateY(2px); }
+  .note { margin-top: 22px; font: 500 13px/1.6 "JetBrains Mono", monospace; color: var(--ink-soft); max-width: 80ch; }
+
+  /* two checklists side by side */
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 100px); }
+  .checks .h { font-size: clamp(32px, 4vw, 64px); }
+  .list { list-style: none; margin-top: clamp(24px, 3vw, 40px); }
+  .list li { display: grid; grid-template-columns: 22px 1fr; gap: 4px 14px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .dark .list li { border-color: rgba(238, 246, 243, 0.14); }
+  .list li .cog-ic { width: 18px; height: 18px; color: var(--turq); grid-row: span 2; transform: translateY(2px); }
+  .dark .list li .cog-ic { color: var(--yellow); }
+  .list b { font-weight: 700; text-transform: uppercase; font-size: clamp(14px, 1.1vw, 16px); }
+  .list span { font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+  .dark .list span { color: rgba(238, 246, 243, 0.7); }
+
+  /* rescue */
+  .rescue-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2vw, 24px); margin-top: clamp(32px, 4vw, 56px); counter-reset: s; }
+  .rs { padding: 24px; border-radius: 20px; border: 1.5px solid var(--ink); }
+  .rs .n { font: 600 12px/1 "JetBrains Mono", monospace; color: var(--turq-d); }
+  .rs h3 { margin-top: 14px; font-weight: 800; text-transform: uppercase; font-size: clamp(18px, 1.5vw, 22px); }
+  .rs p { margin-top: 8px; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+  .signs { margin-top: clamp(28px, 3vw, 44px); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .signs b { font: 600 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 6px; }
+
+  /* faq */
+  .faq { margin-top: clamp(28px, 3vw, 44px); max-width: 900px; }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 20px; padding: 20px 0;
+    font-weight: 700; font-size: clamp(16px, 1.3vw, 19px); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary .cog-ic { width: 18px; height: 18px; flex: none; color: var(--turq); transition: transform 0.4s; }
+  .faq details[open] summary .cog-ic { transform: rotate(90deg); }
+  .faq details p { padding: 0 0 20px; font-size: 15px; line-height: 1.6; color: var(--ink-soft); max-width: 70ch; }
+
+  /* cta */
+  #cta { background: var(--yellow); text-align: center; }
+  #cta .h { font-size: clamp(40px, 6vw, 96px); }
+  #cta .lead { max-width: 46ch; margin: 20px auto 0; color: var(--ink); }
+  #cta .btn { margin-top: 28px; background: var(--ink); color: var(--paper); }
+
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; min-height: 0; padding-top: 110px; }
+    .hero-gear { display: none; }
+    .plans, .checks { grid-template-columns: 1fr; }
+    .rescue-steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) { .rescue-steps { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body data-topic="support">
+
+<header><a class="brand" href="index.html" aria-label="LightGearLab home"></a></header>
+
+<main>
+  <section id="hero">
+    <div>
+      <div class="tags"><span class="pill">Support &amp; care</span><span class="pill">SLA</span><span class="pill">Project rescue</span></div>
+      <h1 class="h">We keep it <em>turning.</em></h1>
+      <p class="lead">Launch is the start, not the finish. We look after what we build, and what others started, with support sized to how
+        critical your system is, security in every release, and a handover you can actually use.</p>
+      <div class="btns">
+        <a class="btn" href="index.html#contact">Talk about support <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="#rescue">Rescue a project</a>
+      </div>
+    </div>
+    <div class="hero-gear" aria-hidden="true"><svg id="heroGear" viewBox="-100 -100 200 200"></svg></div>
+  </section>
+
+  <section id="plans">
+    <h2 class="h">Support that fits the <em>project.</em></h2>
+    <p class="lead sub">Every support arrangement comes with an SLA. What's in it depends on how complex and how critical your system is,
+      so we agree response times, hours and scope with you rather than force a one-size package.</p>
+    <div class="plans">
+      <article class="plan"><span class="for">For websites &amp; simple apps</span><h3>Essential</h3>
+        <p>Keep it healthy, secure and up to date.</p>
+        <ul class="ticks"><li>Uptime monitoring</li><li>Security &amp; dependency updates</li><li>Backups</li><li>Business-hours support</li></ul></article>
+      <article class="plan"><span class="for">For business systems &amp; apps</span><h3>Standard</h3>
+        <p>Everything in Essential, plus room to keep improving.</p>
+        <ul class="ticks"><li>Agreed response times</li><li>Monthly hours for fixes &amp; small changes</li><li>Performance checks</li><li>Regular health reports</li></ul></article>
+      <article class="plan"><span class="for">For critical platforms</span><h3>Critical</h3>
+        <p>For systems your business can't run without.</p>
+        <ul class="ticks"><li>Priority response</li><li>Extended support hours</li><li>Incident handling &amp; reporting</li><li>Capacity &amp; disaster-recovery planning</li></ul></article>
+    </div>
+    <p class="note">Response times, support hours and monthly allowances are set in your SLA, based on the project.</p>
+  </section>
+
+  <section id="security" class="dark">
+    <div class="checks">
+      <div>
+        <h2 class="h">Secure on every <em>deployment.</em></h2>
+        <p class="lead sub">Security isn't a phase at the end. These checks are part of how every release goes out.</p>
+        <ul class="list">
+          <li><b>Hardened configuration</b><span>Secure defaults, least-privilege access, no debug settings in production.</span></li>
+          <li><b>Encrypted everywhere</b><span>HTTPS on every endpoint, encrypted secrets, nothing sensitive in the code.</span></li>
+          <li><b>Dependency scanning</b><span>Known vulnerabilities checked and patched before each release.</span></li>
+          <li><b>OWASP-minded code</b><span>Input validation, safe authentication and protection against common attacks.</span></li>
+          <li><b>Backups you can restore</b><span>Automated backups, and restores actually tested.</span></li>
+          <li><b>Logging &amp; monitoring</b><span>So problems are spotted early, not reported by your users.</span></li>
+        </ul>
+      </div>
+      <div id="handover">
+        <h2 class="h">A handover you can <em>use.</em></h2>
+        <p class="lead sub">Whether we keep supporting it or your team takes over, you get everything needed to own the system.</p>
+        <ul class="list">
+          <li><b>Source code &amp; ownership</b><span>Full repository access, transferred to your accounts.</span></li>
+          <li><b>Credentials &amp; accounts</b><span>Hosting, domains, app stores and services, handed over securely.</span></li>
+          <li><b>Documentation</b><span>Architecture, setup and deployment guides your next developer can follow.</span></li>
+          <li><b>Walkthrough &amp; training</b><span>A live session with your team, recorded for later.</span></li>
+          <li><b>Admin guide</b><span>How to manage content, users and settings day to day.</span></li>
+          <li><b>Warranty period</b><span>We stay on hand to fix issues found after go-live.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="rescue">
+    <h2 class="h">Stuck or broken? We'll take a <em>look.</em></h2>
+    <p class="lead sub">Projects stall: a developer leaves, a deadline slips, something breaks and nobody knows why. We start with an honest
+      health check, then help you decide what to do next.</p>
+    <div class="rescue-steps">
+      <div class="rs"><span class="n">01</span><h3>Health check</h3><p>We review the code, infrastructure, security and what's been delivered so far.</p></div>
+      <div class="rs"><span class="n">02</span><h3>Honest report</h3><p>What works, what's at risk, and what it would take to finish, in plain language.</p></div>
+      <div class="rs"><span class="n">03</span><h3>Stabilise</h3><p>Fix what's urgent first: security holes, crashes, broken deployments.</p></div>
+      <div class="rs"><span class="n">04</span><h3>Continue</h3><p>Finish the build, or move it onto a support plan, whichever fits.</p></div>
+    </div>
+    <div class="signs"><b>Sound familiar?</b><span class="pill">Developer disappeared</span><span class="pill">Half-finished build</span>
+      <span class="pill">Keeps crashing</span><span class="pill">Can't deploy</span><span class="pill">No documentation</span><span class="pill">Security worries</span></div>
+    <a class="btn" href="#contact" data-contact="rescue" style="margin-top:28px">Request a health check <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </section>
+
+  <section id="faq">
+    <h2 class="h">Good to <em>know.</em></h2>
+    <div class="faq">
+      <details><summary>Do you support projects you didn't build?<span class="q"></span></summary>
+        <p>Yes. We start with a health check so we understand the system before taking it on, and we'll be honest if a rebuild makes more sense than a repair.</p></details>
+      <details><summary>How is the SLA decided?<span class="q"></span></summary>
+        <p>By how complex and how critical the system is. We agree response times, support hours and what's covered with you before anything is signed.</p></details>
+      <details><summary>Can we switch from support to our own team later?<span class="q"></span></summary>
+        <p>Of course. The handover gives your team the code, accounts and documentation to take over smoothly.</p></details>
+      <details><summary>What happens if something breaks outside support hours?<span class="q"></span></summary>
+        <p>That depends on your plan. Critical systems can include extended hours; for others, monitoring catches issues early and we respond within the agreed times.</p></details>
+    </div>
+  </section>
+
+  <section id="cta">
+    <h2 class="h">Let's keep it <em>running.</em></h2>
+    <p class="lead">Tell us about your system, whether we built it or not, and we'll suggest the right level of support.</p>
+    <a class="btn" href="index.html#contact">Get in touch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </section>
+</main>
+
+<footer class="dark">
+  <div class="foot">
+    <div><span class="brand" role="img" aria-label="LightGearLab"></span>
+      <p style="margin-top:18px; max-width:34ch">Handcrafting digital experiences. A digital product &amp; experimental studio.</p></div>
+    <div><h4>LightGearLab Sdn. Bhd.</h4><p>Company no. 1138526-K<br>D2-05-03A, Tamarind Square<br>Persiaran Multimedia, Cyber 10<br>63000 Cyberjaya, Selangor<br>Malaysia</p></div>
+    <div><h4>Explore</h4><a href="index.html">The story</a><a href="web-apps.html">Web apps &amp; systems</a><a href="mobile-apps.html">Mobile apps</a><a href="index.html#contact">Contact</a></div>
+  </div>
+  <div class="legal"><span>© 2026 LightGearLab Sdn. Bhd.</span><span>Support &amp; care</span></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script type="module">
+import { initMenu } from './shared/menu.js';
+import { gearPath, COG_ICON, themeHeader } from './shared/gears.js';
+gsap.registerPlugin(ScrollTrigger);
+initMenu();
+themeHeader();
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.ticks li, .list li').forEach((li) => li.insertAdjacentHTML('afterbegin', COG_ICON));
+document.querySelectorAll('.faq summary .q').forEach((q) => (q.outerHTML = COG_ICON));
+// one quiet gear in the hero
+const hg = document.getElementById('heroGear');
+hg.innerHTML = `<path fill="currentColor" fill-rule="evenodd" d="${gearPath(16, 180 / 18, 26)}"/>`;
+if (!reduce) gsap.to(hg.firstChild, { rotation: 360, svgOrigin: '0 0', duration: 30, repeat: -1, ease: 'none' });
+gsap.from('#hero > div:first-child > *', { y: 30, autoAlpha: 0, stagger: 0.08, duration: 0.9, ease: 'power3.out', delay: 0.1 });
+gsap.utils.toArray('section:not(#hero) .h, .plan, .list li, .rs, .faq details').forEach((el) =>
+  gsap.from(el, { y: 26, autoAlpha: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+</script>
+</body>
+</html>

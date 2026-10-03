@@ -204,7 +204,7 @@
   }
 </style>
 </head>
-<body>
+<body data-topic="general">
 <canvas id="scene"></canvas>
 <div id="loader"><span>LOADING ENGINE — 0%</span></div>
 
@@ -2003,7 +2003,6 @@ const GO = {
   process: () => document.getElementById('hero').offsetTop + 2,
   support: () => document.getElementById('hero').offsetTop + 2,
   stack: () => sectionY('stack', 0.58),
-  contact: () => document.documentElement.scrollHeight - innerHeight,
 };
 const AFTER = { process: () => goTo('overview'), support: () => goTo('engine') };   // open the matching process step
 const menu = initMenu({ onGo: (go) => {
