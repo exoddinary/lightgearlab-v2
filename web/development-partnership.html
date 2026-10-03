@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Development Partnership — LightGearLab</title>
+<meta name="description" content="LightGearLab partners with companies on tender projects: we bring the development team, you bring the opportunity.">
+<link rel="stylesheet" href="shared/menu.css">
+<link rel="stylesheet" href="shared/page.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+  /* 1 · hero: your gear and ours both mesh with the project gear */
+  #hero { min-height: 100vh; min-height: 100svh; padding: 130px var(--gut) 60px; display: grid; grid-template-columns: 1fr 1.05fr;
+    gap: clamp(24px, 4vw, 60px); align-items: center; overflow: hidden; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+  #hero .h { font-size: clamp(44px, 6.4vw, 112px); }
+  #hero .lead { margin-top: 24px; max-width: 44ch; }
+  #hero .btn { margin-top: 30px; }
+  .trio { position: relative; }
+  .trio svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .trio .lbl { position: absolute; translate: -50% -50%; text-align: center; pointer-events: none; }
+  .trio .lbl b { display: block; font: 800 clamp(12px, 1.3vw, 19px)/1.05 Inter, sans-serif; text-transform: uppercase; }
+  .trio .lbl small { display: block; margin-top: 5px; font: 600 clamp(9px, 0.75vw, 11px)/1 "JetBrains Mono", monospace; letter-spacing: 0.06em;
+    text-transform: uppercase; opacity: 0.7; }
+
+  /* 2 · how we partner */
+  #modes { padding: clamp(80px, 9vw, 140px) var(--gut); }
+  .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.4vw, 32px); margin-top: clamp(36px, 5vw, 64px); }
+  .mode { position: relative; padding: clamp(24px, 2.6vw, 36px); border-radius: 22px; background: var(--paper-2); overflow: hidden; min-height: 320px;
+    display: flex; flex-direction: column; }
+  .mode:nth-child(2) { background: var(--turq); }
+  .mode:nth-child(3) { background: var(--yellow); }
+  .mode .num { font: 600 12px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; }
+  .mode h3 { margin-top: auto; font-weight: 800; text-transform: uppercase; font-size: clamp(24px, 2.4vw, 38px); line-height: 1; letter-spacing: -0.01em; }
+  .mode p { margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); max-width: 34ch; }
+  .mode:nth-child(2) p { color: rgba(16, 53, 50, 0.85); }
+  .mode .corner { position: absolute; right: -40px; top: -40px; width: 170px; opacity: 0.22; }
+  .mode .corner path { fill: var(--ink); }
+
+  /* 3 · belt drive through the tender */
+  #belt { height: 100vh; height: 100svh; padding: clamp(80px, 9vw, 120px) 0 clamp(40px, 5vw, 70px); display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+  #belt .h { padding: 0 var(--gut); max-width: 18ch; }
+  .belt-stage { position: relative; align-self: center; overflow: hidden; }
+  .belt-stage svg { display: block; width: 100%; height: auto; }
+  .belt-stage .ttl { font: 800 34px/1 Inter, sans-serif; text-transform: uppercase; fill: #eef6f3; opacity: 0; transition: opacity 0.35s, fill 0.35s; }
+  .belt-stage .num { font: 600 15px/1 "JetBrains Mono", monospace; fill: var(--yellow); opacity: 0.35; transition: opacity 0.35s; }
+  .belt-stage .ttl.on, .belt-stage .num.on { opacity: 1; }
+  .belt-cap { min-height: 3.2em; padding: 0 var(--gut); margin-top: clamp(10px, 2vw, 24px); max-width: 60ch; font-size: clamp(16px, 1.3vw, 20px);
+    line-height: 1.55; color: rgba(238, 246, 243, 0.8); }
+
+  /* 4 · you bring / we bring */
+  #mesh-split { padding: clamp(80px, 9vw, 140px) var(--gut); }
+  .split2 { display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(20px, 4vw, 60px); align-items: start; margin-top: clamp(36px, 5vw, 64px); }
+  .split2 h3 { font: 600 12px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; color: var(--turq-d); }
+  .split2 ul { list-style: none; }
+  .split2 li { display: flex; align-items: center; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--line); font-weight: 700; text-transform: uppercase;
+    font-size: clamp(14px, 1.1vw, 17px); }
+  .split2 li .cog-ic { width: 16px; height: 16px; flex: none; color: var(--turq); }
+  .split2 .right li .cog-ic { color: var(--yellow); }
+  .split2 .pair { width: clamp(120px, 14vw, 220px); align-self: center; }
+  .split2 .pair svg { display: block; width: 100%; overflow: visible; }
+
+  /* 5 · cta */
+  #cta { background: var(--turq); padding: clamp(90px, 10vw, 150px) var(--gut) 0; overflow: hidden; text-align: center; }
+  #cta .h { font-size: clamp(48px, 8vw, 140px); }
+  #cta .lead { max-width: 46ch; margin: 22px auto 0; color: var(--teal); }
+  .mesh { position: relative; height: clamp(220px, 26vw, 400px); margin-top: clamp(20px, 3vw, 40px); }
+  .mesh svg { position: absolute; left: 50%; bottom: 0; width: clamp(560px, 66vw, 1040px); translate: -50% 38%; overflow: visible; }
+  .mesh .btn { position: absolute; left: 50%; top: 14%; translate: -50% 0; background: var(--ink); color: var(--paper); z-index: 2; }
+
+  @media (max-width: 820px) {
+    #hero { grid-template-columns: 1fr; padding-top: 100px; }
+    .modes { grid-template-columns: 1fr; }
+    .mode { min-height: 240px; }
+    .belt-stage svg { width: 300%; }
+    .split2 { grid-template-columns: 1fr; }
+    .split2 .pair { justify-self: center; }
+  }
+</style>
+</head>
+<body>
+
+<header><a class="brand" href="index.html" aria-label="LightGearLab home"></a></header>
+
+<main>
+  <section id="hero">
+    <div>
+      <div class="tags"><span class="pill">Development partnership</span><span class="pill">Tender projects</span></div>
+      <h1 class="h">Two gears. One <em>project.</em></h1>
+      <p class="lead">You bring the opportunity and the client relationship. We bring the development team behind it. Together we bid on
+        and deliver tender projects neither of us would take on alone.</p>
+      <a class="btn" href="index.html#contact">Talk partnership <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="trio" id="trio" aria-label="Your company's gear and LightGearLab's gear both drive the project gear"><svg id="trioSvg"></svg></div>
+  </section>
+
+  <section id="modes">
+    <h2 class="h reveal">Ways we <em>mesh.</em></h2>
+    <div class="modes">
+      <article class="mode"><svg class="corner gear-sm" viewBox="-100 -100 200 200" data-z="10"></svg><span class="num">01</span>
+        <h3>Technical partner</h3><p>You lead the bid and the client. We are your development arm, from proposal to production.</p></article>
+      <article class="mode"><svg class="corner gear-sm" viewBox="-100 -100 200 200" data-z="12"></svg><span class="num">02</span>
+        <h3>Joint bid</h3><p>We bid together as partners, each gear doing what it does best, one plan for the client.</p></article>
+      <article class="mode"><svg class="corner gear-sm" viewBox="-100 -100 200 200" data-z="14"></svg><span class="num">03</span>
+        <h3>White-label</h3><p>We design and build it; it ships under your name. Your client, your brand, our engineering.</p></article>
+    </div>
+  </section>
+
+  <section id="belt" class="dark">
+    <h2 class="h reveal">Through every stage of the <em>tender.</em></h2>
+    <div>
+      <div class="belt-stage"><svg id="beltSvg" aria-label="Tender brief, technical proposal, costing and timeline, delivery, handover and support"></svg></div>
+      <p class="belt-cap" id="beltCap"></p>
+    </div>
+  </section>
+
+  <section id="mesh-split">
+    <h2 class="h reveal">What each gear <em>brings.</em></h2>
+    <div class="split2">
+      <div><h3>You bring</h3><ul class="cogs">
+        <li>The tender opportunity</li><li>The client relationship</li><li>Domain knowledge</li><li>Commercial lead</li></ul></div>
+      <div class="pair"><svg id="pairSvg" aria-hidden="true"></svg></div>
+      <div class="right"><h3>We bring</h3><ul class="cogs">
+        <li>Solution architecture</li><li>Technical proposal &amp; estimates</li><li>The development team</li><li>Delivery &amp; support</li></ul></div>
+    </div>
+  </section>
+
+  <section id="cta">
+    <h2 class="h">Bidding on something? Let's <em>mesh.</em></h2>
+    <p class="lead">Tell us about the tender. We'll come back with how we'd build it, what it costs and how long it takes.</p>
+    <div class="mesh"><svg id="mesh"></svg><a class="btn" href="index.html#contact">Talk partnership <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </section>
+</main>
+
+<footer class="dark">
+  <div class="foot">
+    <div><span class="brand" role="img" aria-label="LightGearLab"></span>
+      <p style="margin-top:18px; max-width:34ch">Handcrafting digital experiences. A digital product &amp; experimental studio.</p></div>
+    <div><h4>LightGearLab Sdn. Bhd.</h4><p>Company no. 1138526-K<br>D2-05-03A, Tamarind Square<br>Persiaran Multimedia, Cyber 10<br>63000 Cyberjaya, Selangor<br>Malaysia</p></div>
+    <div><h4>Explore</h4><a href="index.html">The story</a><a href="web-apps.html">Web apps &amp; systems</a><a href="index.html#process">Process</a><a href="index.html#contact">Contact</a></div>
+  </div>
+  <div class="legal"><span>© 2026 LightGearLab Sdn. Bhd.</span><span>Development partnership</span></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script type="module">
+import { initMenu } from './shared/menu.js';
+gsap.registerPlugin(ScrollTrigger);
+initMenu();
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS = 'http://www.w3.org/2000/svg';
+const COG = '<svg class="cog-ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6 1.8.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.8 2.6.5v3.4l-2.6.5-.8 1.8 1.5 2.2-2.4 2.4-2.2-1.5-1.8.8-.5 2.6h-3.4l-.5-2.6-1.8-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.8L2 13.7v-3.4l2.6-.5.8-1.8-1.5-2.2 2.4-2.4 2.2 1.5 1.8-.8zM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></svg>';
+document.querySelectorAll('.cogs li').forEach((li) => li.insertAdjacentHTML('afterbegin', COG));
+
+// gear outline: z teeth, one centred on +x at rotation 0 (module m: pitch radius m·z/2)
+function gearPath(z, m, hole = 0) {
+  const rp = m * z / 2, ro = rp + m, rr = rp - 1.25 * m, pitch = 2 * Math.PI / z;
+  let d = '';
+  for (let i = 0; i < z; i++) {
+    const a = i * pitch;
+    [[-0.29, rr], [-0.17, ro], [0.17, ro], [0.29, rr]].forEach(([f, r], j) => {
+      d += (i === 0 && j === 0 ? 'M' : 'L') + (r * Math.cos(a + f * pitch)).toFixed(2) + ' ' + (r * Math.sin(a + f * pitch)).toFixed(2);
+    });
+    const n = a + pitch;
+    d += `A${rr.toFixed(2)} ${rr.toFixed(2)} 0 0 1 ${(rr * Math.cos(n - 0.29 * pitch)).toFixed(2)} ${(rr * Math.sin(n - 0.29 * pitch)).toFixed(2)}`;
+  }
+  d += 'Z';
+  if (hole) d += `M${hole} 0A${hole} ${hole} 0 1 0 ${-hole} 0A${hole} ${hole} 0 1 0 ${hole} 0Z`;
+  return d;
+}
+// a chain of meshing gears, each placed by centre; gear B (direction θ from A) turns φB = θ + π + π/zB + (zA/zB)(θ − φA)
+function makeChain(svg, gears, m, pad = 6) {
+  svg.innerHTML = '';
+  gears.forEach((g, i) => {
+    g.ro = m * (g.z / 2 + 1);
+    if (i > 0) { const p = gears[g.from ?? i - 1]; g.th = Math.atan2(g.y - p.y, g.x - p.x); g.prev = p; }
+    const el = document.createElementNS(NS, 'path');
+    el.setAttribute('fill', g.c); el.setAttribute('fill-rule', 'evenodd'); el.setAttribute('d', gearPath(g.z, m, g.hole ?? m * g.z * 0.14));
+    if (g.t) el.setAttribute('d', gearPath(g.z, m, 0));   // labelled gears: solid, so the label reads
+    svg.append(el); g.el = el;
+  });
+  const minX = Math.min(...gears.map((g) => g.x - g.ro)) - pad, maxX = Math.max(...gears.map((g) => g.x + g.ro)) + pad;
+  const minY = Math.min(...gears.map((g) => g.y - g.ro)) - pad, maxY = Math.max(...gears.map((g) => g.y + g.ro)) + pad;
+  svg.setAttribute('viewBox', `${minX} ${minY} ${maxX - minX} ${maxY - minY}`);
+  return { gears, vb: { x: minX, y: minY, w: maxX - minX, h: maxY - minY } };
+}
+function driveChain({ gears }, phi0) {
+  gears.forEach((g, i) => {
+    g.phi = i === 0 ? phi0 : g.th + Math.PI + Math.PI / g.z + (g.prev.z / g.z) * (g.th - g.prev.phi);
+    g.el.setAttribute('transform', `translate(${g.x.toFixed(2)} ${g.y.toFixed(2)}) rotate(${(g.phi * 180 / Math.PI).toFixed(2)})`);
+  });
+}
+const place = (m, a, b, angDeg) => { const d = m * (a.z + b.z) / 2 + 0.08 * m, t = angDeg * Math.PI / 180; return { x: a.x + Math.cos(t) * d, y: a.y + Math.sin(t) * d }; };
+
+// hero: your gear drives the project gear, which drives ours
+const HM = 10;
+const yours = { z: 22, c: '#3fb0a9', x: 0, y: 0, t: 'Your company', s: 'the opportunity' };
+const project = { z: 26, c: '#1d1c1a', ...{}, t: 'The project', s: 'one plan', lc: '#e9e5de' };
+Object.assign(project, place(HM, yours, project, 35));
+const ours = { z: 16, c: '#f2c14e', from: 1, t: 'LightGearLab', s: 'the build' };
+Object.assign(ours, place(HM, project, ours, 145));
+const hero = makeChain(document.getElementById('trioSvg'), [yours, project, ours], HM, 10);
+const trio = document.getElementById('trio');
+hero.gears.forEach((g) => {
+  const d = document.createElement('div'); d.className = 'lbl';
+  d.innerHTML = `<b>${g.t}</b><small>${g.s}</small>`; d.style.color = g.lc || '#1d1c1a';
+  d.style.left = ((g.x - hero.vb.x) / hero.vb.w * 100) + '%'; d.style.top = ((g.y - hero.vb.y) / hero.vb.h * 100) + '%';
+  trio.append(d);
+});
+// mode cards: a quiet gear in the corner of each
+const smalls = [...document.querySelectorAll('.gear-sm')].map((svg, i) => {
+  const z = +svg.dataset.z, m = 180 / (z + 2);
+  svg.innerHTML = `<path d="${gearPath(z, m, m * z * 0.18)}" fill-rule="evenodd"/>`;
+  return { el: svg.firstChild, z, dir: i % 2 ? -1 : 1 };
+});
+// you bring / we bring: a small meshing pair in the middle
+const PM = 10, pa = { z: 14, c: '#3fb0a9', x: 0, y: 0 }, pb = { z: 14, c: '#f2c14e' };
+Object.assign(pb, place(PM, pa, pb, window.innerWidth <= 820 ? 0 : 90));
+const pair = makeChain(document.getElementById('pairSvg'), [pa, pb], PM, 4);
+// cta pair
+const CM = 12, ca = { z: 22, c: '#103532', x: 0, y: 0 }, cb = { z: 18, c: '#f2c14e' };
+Object.assign(cb, place(CM, ca, cb, 0));
+const cta = makeChain(document.getElementById('mesh'), [ca, cb], CM, 4);
+
+// ---------- belt drive: five pulleys on one toothed belt; the scroll moves the belt, the pulleys turn with it ----------
+const STAGES = [
+  ['Tender brief', 'You bring the opportunity; we read the requirements with you and say honestly whether it is a fit.'],
+  ['Technical proposal', 'Solution architecture and the technical write-up for your bid, in your format.'],
+  ['Costing & timeline', 'Effort, cost and a delivery plan realistic enough to stand behind after the award.'],
+  ['Delivery', 'Our team builds as part of yours: clean architecture, honest progress updates, demos you can click.'],
+  ['Handover & support', 'Documentation, training and support after go-live, so the project keeps turning.'],
+];
+const belt = (() => {
+  const svg = document.getElementById('beltSvg'), stage = svg.parentElement, cap = document.getElementById('beltCap');
+  const W = 1600, H = 330, R = 58, cy = 120, x1 = 140, xN = W - 140, n = STAGES.length;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const xs = STAGES.map((_, i) => x1 + i * (xN - x1) / (n - 1));
+  const path = `M${x1} ${cy - R}L${xN} ${cy - R}A${R} ${R} 0 0 1 ${xN} ${cy + R}L${x1} ${cy + R}A${R} ${R} 0 0 1 ${x1} ${cy - R}Z`;
+  const spokes = Array.from({ length: 5 }, (_, k) => { const a = k * 2 * Math.PI / 5; return `<line x1="0" y1="0" x2="${(R * 0.72 * Math.cos(a)).toFixed(1)}" y2="${(R * 0.72 * Math.sin(a)).toFixed(1)}"/>`; }).join('');
+  svg.innerHTML = `<path d="${path}" fill="none" stroke="#e9e5de" stroke-width="7"/>` +
+    `<path class="teeth" d="${path}" fill="none" stroke="#e9e5de" stroke-width="18" stroke-dasharray="7 9"/>` +
+    xs.map((x, i) => `<g class="pul" transform="translate(${x} ${cy})"><circle r="${R - 9}" fill="#3fb0a9"/>` +
+      `<g stroke="#103532" stroke-width="7" stroke-linecap="round">${spokes}</g><circle r="${R * 0.2}" fill="#103532"/></g>` +
+      `<text class="num" x="${x}" y="${cy + R + 56}" text-anchor="middle">0${i + 1}</text>` +
+      `<text class="ttl" x="${x}" y="${cy + R + 96}" text-anchor="middle">${STAGES[i][0].replace('&', '&amp;')}</text>`).join('');
+  const teeth = svg.querySelector('.teeth'), puls = [...svg.querySelectorAll('.pul')], nums = svg.querySelectorAll('.num'), ttls = svg.querySelectorAll('.ttl');
+  const travel = 3.2 * (xN - x1);              // belt length moved across the section
+  let last = -1;
+  const st = { p: 0 };
+  const draw = () => {
+    const s = st.p * travel, ang = s / R * 180 / Math.PI;
+    teeth.setAttribute('stroke-dashoffset', (-s).toFixed(1));
+    const on = Math.min(n - 1, Math.floor(st.p * n * 0.999));
+    puls.forEach((g, i) => {
+      g.setAttribute('transform', `translate(${xs[i]} ${cy}) rotate(${ang.toFixed(1)})`);
+      g.firstChild.setAttribute('fill', i === on ? '#f2c14e' : '#3fb0a9');
+    });
+    if (on !== last) {
+      last = on;
+      nums.forEach((e, i) => e.classList.toggle('on', i === on)); ttls.forEach((e, i) => e.classList.toggle('on', i === on));
+      cap.textContent = STAGES[on][1];
+    }
+    // phones: the belt is wider than the screen; pan to the active pulley
+    const Wv = stage.clientWidth, Ws = svg.getBoundingClientRect().width;
+    const tx = Ws > Wv + 1 ? Math.min(0, Math.max(Wv - Ws, Wv / 2 - xs[on] * Ws / W)) : 0;
+    gsap.to(svg, { x: tx, duration: 0.5, overwrite: true });
+  };
+  draw();
+  gsap.to(st, { p: 1, ease: 'none', onUpdate: draw, scrollTrigger: { trigger: '#belt', start: 'top top', end: '+=200%', pin: true, scrub: 0.4 } });
+  window.addEventListener('resize', draw);
+  return st;
+})();
+
+// everything turns slowly, faster while scrolling
+let phase = 0, boost = 0, lastY = scrollY;
+gsap.ticker.add((t, dt) => {
+  const v = Math.abs(scrollY - lastY); lastY = scrollY;
+  boost += (Math.min(v * 0.02, 3) - boost) * 0.08;
+  if (reduce) return;
+  phase += (0.22 + boost) * dt / 1000;
+  driveChain(hero, phase);
+  driveChain(pair, phase * 1.3);
+  driveChain(cta, -phase * 0.8);
+  smalls.forEach((s) => s.el.setAttribute('transform', `rotate(${(s.dir * phase * 60 * 12 / s.z).toFixed(1)})`));
+});
+
+gsap.from('#hero > div:first-child > *', { y: 30, autoAlpha: 0, stagger: 0.08, duration: 0.9, ease: 'power3.out', delay: 0.15 });
+gsap.from('#trio', { scale: 0.85, rotate: -8, autoAlpha: 0, duration: 1.2, ease: 'power3.out', delay: 0.3 });
+gsap.utils.toArray('.reveal').forEach((el) => gsap.from(el, { y: 40, autoAlpha: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' } }));
+gsap.utils.toArray('.mode, .split2 li').forEach((el, i) =>
+  gsap.from(el, { y: 30, autoAlpha: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+
+// header turns light over dark / turquoise sections (checked under the header itself, so pinned sections work too)
+const header = document.querySelector('header');
+const themeHeader = () => {
+  const under = document.elementsFromPoint(Math.min(200, innerWidth / 2), 44).find((el) => !header.contains(el) && !el.closest('#menu, .menu-toggle'));
+  header.classList.toggle('light', !!(under && under.closest('.dark, .on-turq')));
+};
+window.addEventListener('scroll', themeHeader, { passive: true });
+themeHeader();
+</script>
+</body>
+</html>

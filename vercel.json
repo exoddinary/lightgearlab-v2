@@ -5,6 +5,21 @@
   "installCommand": "",
   "outputDirectory": "web",
   "headers": [
-    { "source": "/(.*)\\.glb", "headers": [{ "key": "Content-Type", "value": "model/gltf-binary" }] }
+    {
+      "source": "/(.*)\\.glb",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "model/gltf-binary"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/web-development.html",
+      "destination": "/web-apps.html",
+      "permanent": true
+    }
   ]
 }

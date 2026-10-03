@@ -9,12 +9,13 @@ const BULB = 'M161.92 139.77 154.19 141.44C153.7 144.03 153.03 146.55 152.18 148
 const BADGE = 'M181.4 89.7L196.7 92.2L196.7 107.8L181.4 110.3L177.8 126.0L190.5 134.9L183.7 149.0L168.8 144.6L158.8 157.2L166.4 170.7L154.2 180.5L142.7 170.0L128.1 177.0L129.1 192.5L113.9 196.0L108.1 181.6L91.9 181.6L86.1 196.0L70.9 192.5L71.9 177.0L57.3 170.0L45.8 180.5L33.6 170.7L41.2 157.2L31.2 144.6L16.3 149.0L9.5 134.9L22.2 126.0L18.6 110.3L3.3 107.8L3.3 92.2L18.6 89.7L22.2 74.0L9.5 65.1L16.3 51.0L31.2 55.4L41.2 42.8L33.6 29.3L45.8 19.5L57.3 30.0L71.9 23.0L70.9 7.5L86.1 4.0L91.9 18.4L108.1 18.4L113.9 4.0L129.1 7.5L128.1 23.0L142.7 30.0L154.2 19.5L166.4 29.3L158.8 42.8L168.8 55.4L183.7 51.0L190.5 65.1L177.8 74.0Z';
 const BG_GEAR = 'M179.6 92.2L197.8 93.8L197.8 106.2L179.6 107.8L177.5 119.9L194.0 127.7L189.8 139.2L172.1 134.6L166.0 145.2L178.9 158.2L171.0 167.6L156.0 157.2L146.6 165.0L154.2 181.6L143.6 187.8L133.0 172.9L121.5 177.1L123.0 195.3L110.9 197.4L106.1 179.8L93.9 179.8L89.1 197.4L77.0 195.3L78.5 177.1L67.0 172.9L56.4 187.8L45.8 181.6L53.4 165.0L44.0 157.2L29.0 167.6L21.1 158.2L34.0 145.2L27.9 134.6L10.2 139.2L6.0 127.7L22.5 119.9L20.4 107.8L2.2 106.2L2.2 93.8L20.4 92.2L22.5 80.1L6.0 72.3L10.2 60.8L27.9 65.4L34.0 54.8L21.1 41.8L29.0 32.4L44.0 42.8L53.4 35.0L45.8 18.4L56.4 12.2L67.0 27.1L78.5 22.9L77.0 4.7L89.1 2.6L93.9 20.2L106.1 20.2L110.9 2.6L123.0 4.7L121.5 22.9L133.0 27.1L143.6 12.2L154.2 18.4L146.6 35.0L156.0 42.8L171.0 32.4L178.9 41.8L166.0 54.8L172.1 65.4L189.8 60.8L194.0 72.3L177.5 80.1Z M100 64a36 36 0 1 0 0.01 0Z';
 
-// [label, href (a page) or null, in-story key]
+// [label, href (a page) or null, in-story key]; neither = page still to come (shown with a "soon" tag)
 const SERVICES = [
-  ['Web development', 'web-development.html', null],
-  ['Mobile apps', null, 'stack'],
-  ['Interactive design', null, 'design'],
-  ['Product strategy', null, 'process'],
+  ['Web apps &amp; systems', 'web-apps.html', null],
+  ['Mobile apps', 'mobile-apps.html', null],
+  ['Games tech', null, null],
+  ['AR, VR &amp; MR', null, null],
+  ['Development partnership', 'development-partnership.html', null],
   ['Support &amp; care', null, 'support'],
 ];
 const LINKS = [['Home', 'home'], ['About', 'about'], ['Process', 'process'], ['Any stack', 'stack'], ['Selected works', null], ['Contact', 'contact']];
@@ -31,6 +32,7 @@ function markup() {
   const tooth = `<span class="tooth" aria-hidden="true"><svg viewBox="0 0 24 24">${COG}</svg></span>`;
   const svc = SERVICES.map(([t, href, go]) => {
     const cur = href && href === here ? ' aria-current="page"' : '';
+    if (!href && !go) return `<li><span class="svc-soon" aria-disabled="true">${tooth}<span>${t}<small>soon</small></span></span></li>`;
     return `<li><a href="${href || '#'}"${go ? ` data-go="${go}"` : ''}${cur}>${tooth}<span>${t}</span></a></li>`;
   }).join('');
   const links = LINKS.map(([t, go]) => (go ? `<a href="#" data-go="${go}">${t}</a>`

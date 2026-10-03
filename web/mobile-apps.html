@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile Apps — LightGearLab</title>
+<meta name="description" content="Mobile apps by LightGearLab: iOS, Android and cross-platform apps engineered like clockwork.">
+<link rel="stylesheet" href="shared/menu.css">
+<link rel="stylesheet" href="shared/page.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+  /* 1 · hero: the phone flips over with the scroll, from the app to the clockwork behind it */
+  #hero { height: 100vh; height: 100svh; padding: 110px var(--gut) 40px; display: grid; grid-template-columns: 1fr auto; gap: clamp(24px, 5vw, 80px);
+    align-items: center; overflow: hidden; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+  #hero .h { font-size: clamp(44px, 6.4vw, 112px); }
+  #hero .lead { margin-top: 24px; max-width: 44ch; }
+  .flipnote { margin-top: 26px; display: flex; align-items: center; gap: 10px; font: 600 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--turq-d); }
+  .flipnote .cog-ic { width: 16px; height: 16px; }
+  .phone-wrap { justify-self: center; }
+  #phone3d { display: block; width: clamp(300px, 34vw, 520px); height: min(80vh, 760px); }
+  .phone { position: relative; width: clamp(230px, 22vw, 320px); aspect-ratio: 9 / 18.6; transform-style: preserve-3d; }
+  .face { position: absolute; inset: 0; border-radius: 15% / 7.3%; backface-visibility: hidden; overflow: hidden;
+    box-shadow: 0 30px 60px rgba(16, 53, 50, 0.25), inset 0 0 0 10px #1d1c1a; background: #1d1c1a; }
+  .face.back { transform: rotateY(180deg); background: var(--teal); }
+  /* the app on the front (placeholder UI) */
+  .screen { position: absolute; inset: 10px; border-radius: 13% / 6.4%; background: var(--paper-2); overflow: hidden; padding: 16% 9% 0; }
+  .screen::before { content: ""; position: absolute; left: 50%; top: 2.2%; width: 30%; height: 3.4%; translate: -50% 0; border-radius: 999px; background: #1d1c1a; }
+  .screen .t { height: 12px; width: 46%; border-radius: 6px; background: #1d1c1a; }
+  .screen .t2 { height: 8px; width: 70%; border-radius: 4px; background: rgba(29, 28, 26, 0.25); margin-top: 10px; }
+  .screen .card { margin-top: 16px; height: 34%; border-radius: 18px; background: var(--turq); position: relative; overflow: hidden; }
+  .screen .card::after { content: ""; position: absolute; right: -18%; bottom: -26%; width: 70%; aspect-ratio: 1; border-radius: 50%; background: var(--yellow); }
+  .screen .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .screen .row i { height: 64px; border-radius: 14px; background: #e3ddd2; }
+  .screen .row i:nth-child(2) { background: var(--yellow); }
+  .screen .tab { position: absolute; left: 9%; right: 9%; bottom: 4%; height: 7%; border-radius: 999px; background: #1d1c1a; display: flex; justify-content: space-around; align-items: center; }
+  .screen .tab b { width: 8%; aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, 0.4); }
+  .screen .tab b:first-child { background: var(--yellow); }
+  /* the clockwork on the back */
+  .face.back svg.works { position: absolute; inset: 9% 8% 6%; width: 84%; height: 85%; }
+  .face.back .cam { position: absolute; left: 9%; top: 4%; width: 34%; aspect-ratio: 1; border-radius: 28%; background: #0b2523; box-shadow: inset 0 0 0 3px rgba(255,255,255,0.08); }
+  .face.back .cam::before, .face.back .cam::after { content: ""; position: absolute; width: 36%; aspect-ratio: 1; border-radius: 50%; background: #1d1c1a; box-shadow: inset 0 0 0 3px #2a4f4b; }
+  .face.back .cam::before { left: 10%; top: 10%; } .face.back .cam::after { right: 10%; bottom: 10%; }
+
+  /* 2 · platforms */
+  #platforms { padding: clamp(80px, 9vw, 140px) var(--gut); }
+  .plats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.4vw, 32px); margin-top: clamp(36px, 5vw, 64px); }
+  .plat { padding: clamp(24px, 2.6vw, 36px); border-radius: 22px; background: var(--paper-2); min-height: 280px; display: flex; flex-direction: column; }
+  .plat:nth-child(2) { background: var(--yellow); }
+  .plat:nth-child(3) { background: var(--turq); }
+  .plat .num { font: 600 12px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; }
+  .plat h3 { margin-top: auto; font-weight: 800; text-transform: uppercase; font-size: clamp(24px, 2.4vw, 38px); line-height: 1; }
+  .plat p { margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); max-width: 34ch; }
+  .plat:nth-child(3) p { color: rgba(16, 53, 50, 0.85); }
+  .plat .logos { display: flex; gap: 14px; margin-top: 18px; align-items: center; }
+  .plat .logos img { height: 22px; width: auto; }
+
+  /* 3 · Geneva drive: a continuous wheel advances the slotted wheel in exact quarter-turn steps */
+  #release { height: 100vh; height: 100svh; padding: clamp(80px, 9vw, 120px) var(--gut) clamp(30px, 4vw, 60px); display: grid;
+    grid-template-columns: 1.05fr 1fr; gap: clamp(24px, 5vw, 80px); align-items: center; overflow: hidden; }
+  #geneva { display: block; width: 100%; height: min(74vh, 46vw); }
+  .steps-list { list-style: none; margin-top: clamp(28px, 4vw, 48px); display: grid; gap: 4px; }
+  .steps-list li { padding: 16px 0; border-bottom: 1px solid rgba(238, 246, 243, 0.14); opacity: 0.35; transition: opacity 0.35s; }
+  .steps-list li.on { opacity: 1; }
+  .steps-list b { display: flex; align-items: baseline; gap: 14px; font: 800 clamp(20px, 2vw, 32px)/1 Inter, sans-serif; text-transform: uppercase; }
+  .steps-list b span { font: 600 12px/1 "JetBrains Mono", monospace; color: var(--yellow); }
+  .steps-list p { margin-top: 8px; font-size: 15px; line-height: 1.5; color: rgba(238, 246, 243, 0.75); max-height: 0; overflow: hidden; transition: max-height 0.4s; }
+  .steps-list li.on p { max-height: 80px; }
+
+  /* 4 · capabilities */
+  #caps { padding: clamp(80px, 9vw, 140px) var(--gut); }
+  .caps { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(32px, 6vw, 100px); margin-top: clamp(36px, 5vw, 64px); }
+  .caps .btn { margin-top: 28px; }
+  .cap-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; align-content: start; list-style: none; }
+  .cap-list li { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); font-weight: 700; text-transform: uppercase;
+    font-size: clamp(13px, 1vw, 15px); }
+  .cap-list li .cog-ic { width: 16px; height: 16px; color: var(--turq); flex: none; transition: transform 0.6s; }
+  .cap-list li:hover .cog-ic { transform: rotate(180deg); }
+
+  /* 5 · work: phone-shaped placeholders */
+  #work { padding: clamp(80px, 9vw, 140px) var(--gut); }
+  .work-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
+  .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 48px); margin-top: clamp(36px, 5vw, 64px); }
+  .ph-phone { aspect-ratio: 9 / 18.6; max-width: 300px; width: 100%; margin: 0 auto; border-radius: 15% / 7.3%; background: var(--c); box-shadow: inset 0 0 0 9px #1d1c1a, 0 22px 44px rgba(0, 0, 0, 0.25);
+    display: grid; place-items: center; font: 600 11px/1.4 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(0, 0, 0, 0.45); }
+  .phones article:nth-child(2) { margin-top: clamp(30px, 5vw, 90px); }
+  .phones h3 { margin-top: 18px; text-align: center; font-weight: 800; text-transform: uppercase; font-size: clamp(15px, 1.3vw, 20px); }
+  .phones .pill { display: table; margin: 10px auto 0; }
+
+  /* 6 · cta */
+  #cta { background: var(--yellow); padding: clamp(90px, 10vw, 150px) var(--gut) 0; overflow: hidden; text-align: center; }
+  #cta .h { font-size: clamp(48px, 8vw, 140px); }
+  #cta .lead { max-width: 46ch; margin: 22px auto 0; color: var(--ink); }
+  .mesh { position: relative; height: clamp(220px, 26vw, 400px); margin-top: clamp(20px, 3vw, 40px); }
+  .mesh svg { position: absolute; left: 50%; bottom: 0; width: clamp(560px, 66vw, 1040px); translate: -50% 38%; overflow: visible; }
+  .mesh .btn { position: absolute; left: 50%; top: 14%; translate: -50% 0; background: var(--ink); color: var(--paper); z-index: 2; }
+
+  @media (max-width: 820px) {
+    #hero { grid-template-columns: 1fr; padding-top: 96px; align-content: start; gap: 28px; }
+    #hero .lead { display: none; }
+    #phone3d { width: 100%; height: 56vh; }
+    .plats { grid-template-columns: 1fr; }
+    .plat { min-height: 220px; }
+    #release { grid-template-columns: 1fr; align-content: start; gap: 16px; }
+    #geneva { height: 38vh; }
+    .steps-list { margin-top: 14px; }
+    .caps, .cap-list { grid-template-columns: 1fr; }
+    .phones { grid-template-columns: 1fr; }
+    .phones article:nth-child(2) { margin-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header><a class="brand" href="index.html" aria-label="LightGearLab home"></a></header>
+
+<main>
+  <section id="hero">
+    <div>
+      <div class="tags"><span class="pill">Mobile apps</span><span class="pill">iOS</span><span class="pill">Android</span><span class="pill">Cross-platform</span></div>
+      <h1 class="h">Apps that run like <em>clockwork.</em></h1>
+      <p class="lead">Smooth in the hand, solid underneath. We design and engineer mobile apps where every screen, sync and notification
+        turns the next one, so the experience just feels right.</p>
+      <p class="flipnote"><span class="fn-cog"></span>Scroll to see what's behind the screen</p>
+    </div>
+    <div class="phone-wrap"><canvas id="phone3d" aria-label="A phone that turns over to show the gears turning inside"></canvas></div>
+  </section>
+
+  <section id="platforms">
+    <h2 class="h reveal">One build, every <em>pocket.</em></h2>
+    <div class="plats">
+      <article class="plat"><span class="num">01</span><h3>Native iOS</h3><p>Built for iPhone and iPad with the platform's own tools, for the smoothest feel and the newest features.</p></article>
+      <article class="plat"><span class="num">02</span><h3>Native Android</h3><p>Built for the huge range of Android devices, tuned for performance on every screen size.</p></article>
+      <article class="plat"><span class="num">03</span><h3>Cross-platform</h3><p>One codebase for both stores, when speed to market matters most.</p>
+        <div class="logos"><img src="logos/flutter.png" alt="Flutter"><img src="logos/react.png" alt="React Native"></div></article>
+    </div>
+  </section>
+
+  <section id="release" class="dark">
+    <canvas id="geneva" aria-label="A Geneva drive: a continuously turning wheel advances a slotted wheel one quarter turn at a time"></canvas>
+    <div>
+      <h2 class="h reveal">Released in clean <em>steps.</em></h2>
+      <ol class="steps-list" id="steps">
+        <li><b><span>01</span>Prototype</b><p>Clickable from the first weeks, on a real device in your hand.</p></li>
+        <li><b><span>02</span>Beta</b><p>Test builds for your team and early users, so feedback arrives before launch.</p></li>
+        <li><b><span>03</span>Launch</b><p>App Store and Google Play submission, handled end to end.</p></li>
+        <li><b><span>04</span>Iterate</b><p>Updates on a steady cadence, not big-bang rewrites.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="caps">
+    <h2 class="h reveal">Everything a great app <em>needs.</em></h2>
+    <div class="caps">
+      <div>
+        <p class="lead">From the first sketch to the store listing: interfaces that feel native, back ends that keep data in sync,
+          and the plumbing nobody sees but everybody notices when it's missing.</p>
+        <a class="btn" href="index.html#contact">Request a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <ul class="cap-list cogs">
+        <li>UI / UX for mobile</li><li>Offline-first sync</li>
+        <li>Push notifications</li><li>Payments &amp; in-app purchase</li>
+        <li>Maps &amp; location</li><li>Bluetooth &amp; IoT</li>
+        <li>Camera &amp; AR-ready</li><li>APIs &amp; back end</li>
+        <li>Store submission</li><li>Analytics &amp; crash reporting</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="work" class="dark">
+    <div class="work-head"><h2 class="h reveal">Apps in the <em>wild.</em></h2><span class="pill">View all work <small><b>soon</b></small></span></div>
+    <div class="phones">
+      <article><div class="ph-phone" style="--c:#f2c14e">App screenshot</div><h3>Project name</h3><span class="pill">iOS · Android</span></article>
+      <article><div class="ph-phone" style="--c:#3fb0a9">App screenshot</div><h3>Project name</h3><span class="pill">Cross-platform</span></article>
+      <article><div class="ph-phone" style="--c:#e9e5de">App screenshot</div><h3>Project name</h3><span class="pill">Android</span></article>
+    </div>
+  </section>
+
+  <section id="cta">
+    <h2 class="h">Let's put it in their <em>pocket.</em></h2>
+    <p class="lead">Tell us about the app you have in mind. We'll bring the plan, the team and the code.</p>
+    <div class="mesh"><svg id="mesh"></svg><a class="btn" href="index.html#contact">Start a project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </section>
+</main>
+
+<footer class="dark">
+  <div class="foot">
+    <div><span class="brand" role="img" aria-label="LightGearLab"></span>
+      <p style="margin-top:18px; max-width:34ch">Handcrafting digital experiences. A digital product &amp; experimental studio.</p></div>
+    <div><h4>LightGearLab Sdn. Bhd.</h4><p>Company no. 1138526-K<br>D2-05-03A, Tamarind Square<br>Persiaran Multimedia, Cyber 10<br>63000 Cyberjaya, Selangor<br>Malaysia</p></div>
+    <div><h4>Explore</h4><a href="index.html">The story</a><a href="web-apps.html">Web apps &amp; systems</a><a href="development-partnership.html">Development partnership</a><a href="index.html#contact">Contact</a></div>
+  </div>
+  <div class="legal"><span>© 2026 LightGearLab Sdn. Bhd.</span><span>Mobile apps</span></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { initMenu } from './shared/menu.js';
+import { makeChain, driveChain, place, COG_ICON, themeHeader } from './shared/gears.js';
+gsap.registerPlugin(ScrollTrigger);
+initMenu();
+themeHeader();
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.cogs li').forEach((li) => li.insertAdjacentHTML('afterbegin', COG_ICON));
+document.querySelector('.fn-cog').innerHTML = COG_ICON;
+
+// ---------- hero: a 3D phone (tools/build_phone.py → phone.glb) turns over with the scroll; a gear train turns inside ----------
+const phone3d = (() => {
+  const canvas = document.getElementById('phone3d');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene(), camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -20, 20);
+  camera.position.set(0, 0, 10); camera.lookAt(0, 0, 0);
+  const INK = new THREE.Color(0x0b2523);
+  const lineMat = new THREE.LineBasicMaterial({ color: INK });
+  const fill = (hex) => new THREE.MeshBasicMaterial({ color: hex, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  const outlineWidth = { value: 0.004 };
+  const outlineMat = new THREE.MeshBasicMaterial({ color: INK, side: THREE.BackSide });
+  outlineMat.onBeforeCompile = (sh) => {
+    sh.uniforms.outlineWidth = outlineWidth;
+    sh.vertexShader = 'uniform float outlineWidth;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\ntransformed += normalize(normal) * outlineWidth;');
+  };
+  // the screen: the placeholder app UI, drawn into a texture (swap for a real screenshot later: new TextureLoader().load(...))
+  const sc = document.createElement('canvas'); sc.width = 700; sc.height = 1450;
+  const g = sc.getContext('2d');
+  const rr = (x, y, w, h, r, c) => { g.fillStyle = c; g.beginPath(); g.roundRect(x, y, w, h, r); g.fill(); };
+  rr(0, 0, 700, 1450, 0, '#f6f3ee');
+  rr(240, 34, 220, 58, 29, '#1d1c1a');
+  rr(64, 150, 300, 30, 15, '#1d1c1a'); rr(64, 206, 470, 18, 9, '#c9c4bb');
+  g.save(); g.beginPath(); g.roundRect(64, 270, 572, 480, 44); g.clip(); rr(64, 270, 572, 480, 0, '#3fb0a9');
+  g.fillStyle = '#f2c14e'; g.beginPath(); g.arc(570, 650, 210, 0, Math.PI * 2); g.fill(); g.restore();
+  rr(64, 790, 272, 150, 34, '#e3ddd2'); rr(364, 790, 272, 150, 34, '#f2c14e');
+  rr(64, 1290, 572, 100, 50, '#1d1c1a');
+  ['#f2c14e', '#7d7a74', '#7d7a74', '#7d7a74'].forEach((c, i) => { g.fillStyle = c; g.beginPath(); g.arc(150 + i * 133, 1340, 22, 0, Math.PI * 2); g.fill(); });
+  const tex = new THREE.CanvasTexture(sc); tex.colorSpace = THREE.SRGBColorSpace; tex.flipY = false; tex.anisotropy = 8;
+  const MATS = { Body: fill(0x17443f), Camera: fill(0x1d1c1a), Pins: fill(0x1d1c1a),
+    Gear_0: fill(0xf2c14e), Gear_1: fill(0x3fb0a9), Gear_2: fill(0xeef6f3), Gear_3: fill(0xf2c14e), Gear_4: fill(0x3fb0a9) };
+  const pivot = new THREE.Group(); scene.add(pivot);
+  const st = { flip: 0, intro: 0 };
+  let gears = [], ready = false;
+  new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/'))
+    .load('phone.glb', (gltf) => {
+      const root = gltf.scene;
+      root.rotation.x = Math.PI / 2;                    // glTF is Y-up: stand the phone up, screen towards the camera
+      const parts = [];
+      root.traverse((o) => { if (o.isMesh) parts.push(o); });
+      parts.forEach((o) => {
+        if (o.name === 'Screen') { o.material = new THREE.MeshBasicMaterial({ map: tex }); return; }
+        o.material = MATS[o.name] || MATS.Body;
+        o.add(new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 30), lineMat));
+        o.add(new THREE.Mesh(o.geometry, outlineMat));
+      });
+      pivot.add(root);
+      // gear train: chain order, teeth, and the meshing rule (gear B at direction θ from A: φB = θ + π + π/zB + (zA/zB)(θ − φA))
+      const Z = [22, 12, 18, 10, 16];
+      gears = Z.map((z, i) => ({ z, o: root.getObjectByName('Gear_' + i) }));
+      gears.forEach((gr, i) => {
+        if (!i) return;
+        const p = gears[i - 1].o.position, q = gr.o.position;   // local (Y-up) coords; the Blender plane is (x, -z)
+        gr.th = Math.atan2(-(q.z - p.z), q.x - p.x);
+      });
+      ready = true; resize();
+    });
+  const resize = () => {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w, h, false);
+    const half = Math.max(0.86, 0.86 * (0.56 / (w / h)));
+    camera.left = -half * w / h; camera.right = half * w / h; camera.top = half; camera.bottom = -half; camera.updateProjectionMatrix();
+    outlineWidth.value = 1.2 * (2 * half) / h;
+  };
+  window.addEventListener('resize', resize);
+  let phi = 0;
+  return {
+    st,
+    frame(dt, speed) {
+      if (!ready) return;
+      phi += speed * dt;
+      gears.forEach((gr, i) => {
+        gr.phi = i ? gr.th + Math.PI + Math.PI / gr.z + (gears[i - 1].z / gr.z) * (gr.th - gears[i - 1].phi) : phi;
+        gr.o.rotation.y = gr.phi;
+      });
+      // turn over (with a slight tilt so the depth reads), plus a gentle idle sway
+      const t = st.flip, sway = Math.sin(performance.now() / 1400) * 0.05 * (1 - Math.abs(Math.sin(t * Math.PI)));
+      pivot.rotation.set(-0.18 + 0.1 * Math.sin(t * Math.PI), -0.35 + t * Math.PI + sway, 0.04);
+      pivot.position.y = (1 - st.intro) * -0.4;
+      renderer.render(scene, camera);
+    },
+  };
+})();
+gsap.timeline({ scrollTrigger: { trigger: '#hero', start: 'top top', end: '+=110%', pin: true, scrub: 0.5 } })
+  .to(phone3d.st, { flip: 1, ease: 'power2.inOut', duration: 1 }, 0.1)
+  .to('.flipnote', { autoAlpha: 0, duration: 0.2 }, 0.1)
+  .to({}, { duration: 0.2 });
+gsap.from('#hero > div:first-child > *', { y: 30, autoAlpha: 0, stagger: 0.08, duration: 0.9, ease: 'power3.out', delay: 0.15 });
+gsap.to(phone3d.st, { intro: 1, duration: 1.2, ease: 'power3.out', delay: 0.3 });
+gsap.from('#phone3d', { autoAlpha: 0, duration: 0.8, delay: 0.3 });
+
+// ---------- Geneva drive (3D, built in Blender: tools/build_geneva.py → geneva.glb), drawn in the line style ----------
+// Driver at the origin, wheel at (C, 0) in the Blender plane; one driver turn advances the wheel exactly a quarter turn.
+const steps = document.querySelectorAll('#steps li');
+(() => {
+  const N = 4, A = 1, C = A / Math.sin(Math.PI / N);
+  const canvas = document.getElementById('geneva');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene(), camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -50, 50);
+  const INK = new THREE.Color(0x0b2523);
+  const lineMat = new THREE.LineBasicMaterial({ color: INK });
+  const fill = (hex) => new THREE.MeshBasicMaterial({ color: hex, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  const FILLS = { Geneva: fill(0xf2c14e), Driver: fill(0x3fb0a9), Base: fill(0x1a4a45) };
+  const outlineWidth = { value: 0.004 };
+  const outlineMat = new THREE.MeshBasicMaterial({ color: INK, side: THREE.BackSide });
+  outlineMat.onBeforeCompile = (sh) => {
+    sh.uniforms.outlineWidth = outlineWidth;
+    sh.vertexShader = 'uniform float outlineWidth;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\ntransformed += normalize(normal) * outlineWidth;');
+  };
+  let driver = null, wheel = null, ready = false;
+  const st = { p: 0 };
+  let lastStep = -1;
+  const draw = () => {
+    if (!ready) return;
+    const T = -180 + st.p * N * 360;                    // driver angle (degrees), turning anticlockwise
+    const k = Math.min(N, Math.floor((T + 180) / 360)), th = T - k * 360, half = 180 / N;
+    let w = -90 * k;
+    if (th > -half && th < half) {                        // pin in a slot: the slot points at the pin
+      const t = th * Math.PI / 180;
+      let psi = Math.atan2(A * Math.sin(t), A * Math.cos(t) - C) * 180 / Math.PI;
+      if (psi < 0) psi += 360;
+      w += psi - 225;
+    } else if (th >= half) w -= 90;                       // step done, wheel locked
+    driver.rotation.y = T * Math.PI / 180;
+    wheel.rotation.y = w * Math.PI / 180;
+    renderer.render(scene, camera);
+    const step = Math.max(0, Math.min(N - 1, k + (th >= half ? 1 : 0) - 1));
+    if (step !== lastStep) { lastStep = step; steps.forEach((li, i) => li.classList.toggle('on', i === step)); }
+  };
+  const resize = () => {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w, h, false);
+    const a = w / h, half = Math.max(1.32, 1.32 * 1.7 / a);   // zoomed in: the mechanism fills the space
+    camera.left = -half * a; camera.right = half * a; camera.top = half; camera.bottom = -half;
+    camera.zoom = 1; camera.updateProjectionMatrix();
+    outlineWidth.value = 1.2 * (2 * half) / h;
+    draw();
+  };
+  // three.js is Y-up: the Blender plane (x, y) is (x, -z) here, and the axes point up +y
+  camera.position.set(C / 2 + 4, 7, 5.5); camera.lookAt(C / 2, 0.15, 0);
+  const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
+  new GLTFLoader().setDRACOLoader(draco).load('geneva.glb', (gltf) => {
+    const parts = [];                                   // collect first: the outlines added below are meshes too
+    gltf.scene.traverse((o) => { if (o.isMesh) parts.push(o); });
+    parts.forEach((o) => {
+      o.material = FILLS[o.name] || FILLS.Base;
+      o.add(new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 25), lineMat));
+      o.add(new THREE.Mesh(o.geometry, outlineMat));
+    });
+    scene.add(gltf.scene);
+    driver = gltf.scene.getObjectByName('Driver'); wheel = gltf.scene.getObjectByName('Geneva');
+    ready = true; resize();
+  });
+  window.addEventListener('resize', resize);
+  gsap.to(st, { p: 0.999, ease: 'none', onUpdate: draw, scrollTrigger: { trigger: '#release', start: 'top top', end: '+=220%', pin: true, scrub: 0.4 } });
+})();
+
+// ---------- cta gears ----------
+const CM = 12, ca = { z: 22, c: '#1d1c1a', x: 0, y: 0 }, cb = { z: 18, c: '#3fb0a9' };
+Object.assign(cb, place(CM, ca, cb, 0));
+const cta = makeChain(document.getElementById('mesh'), [ca, cb], CM, 4);
+
+let phase = 0, boost = 0, lastY = scrollY;
+gsap.ticker.add((t, dt) => {
+  const v = Math.abs(scrollY - lastY); lastY = scrollY;
+  boost += (Math.min(v * 0.02, 3) - boost) * 0.08;
+  phone3d.frame(dt / 1000, reduce ? 0 : 0.5 + boost * 1.5);   // (always renders: the flip is scroll-driven)
+  if (reduce) return;
+  phase += (0.3 + boost) * dt / 1000;
+  driveChain(cta, -phase * 0.8);
+});
+
+gsap.utils.toArray('.reveal').forEach((el) => gsap.from(el, { y: 40, autoAlpha: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' } }));
+gsap.utils.toArray('.plat, .cap-list li, .phones article').forEach((el) =>
+  gsap.from(el, { y: 30, autoAlpha: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+</script>
+</body>
+</html>
