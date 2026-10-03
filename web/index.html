@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LightGearLab — Engine Experiment</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="shared/menu.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Yellowtail&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -64,8 +65,6 @@
     #endUI { max-width: 34vw; left: 4vw; } #endUI p { font-size: 17px; max-width: 440px; } #endUI .eyebrow { font-size: 12px; }
     #endUI a { font-size: 13px; padding: 15px 22px; } }
   header.dim .brand { color: #ece7de; }
-  header.dim .hint { opacity: 0 !important; }
-  header .hint { transition: opacity 0.4s; }
   header .brand { transition: color 0.4s; }
   @media (max-width: 820px) {
     .intro h1 { font-size: clamp(30px, 5.6vw, 46px); }   /* tablets: headings grow with the width */
@@ -110,13 +109,13 @@
   /* "ideas" stream: a turquoise wave flowing out of the box, with orbiting development icons. Behind the canvas. */
   #ideas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; visibility: hidden; opacity: 0; }
   #ideas .ic use { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .chip { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 7px; padding: 6px 10px 6px 8px;
-    border-radius: 999px; background: rgba(246, 243, 238, 0.92); border: 1px solid var(--line);
+  .chip { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 7px; padding: 0;
+    background: none; border: 0;
     font: 500 11.5px/1 "JetBrains Mono", monospace; color: var(--ink); white-space: nowrap; will-change: transform, opacity; }
-  /* swap the dot for an official logo later: <img class="logo" src="logos/react.svg"> */
-  .chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+  /* each chip is just the technology's own logo (web/logos) */
+  .chip img { height: 24px; width: auto; display: block; max-width: 130px; }
   /* phones: the side view is rolled 90° (tube comes down from the top), so the copy sits at the bottom */
-  @media (max-width: 820px) { #stackUI { left: 20px; right: 20px; top: auto; bottom: 36px; } #stackUI p { display: none; } .chip { font-size: 10.5px; } }
+  @media (max-width: 820px) { #stackUI { left: 20px; right: 20px; top: auto; bottom: 36px; } #stackUI p { display: none; } .chip img { height: 16px; } }
 
   header {
     position: fixed; top: 28px; left: 32px; right: 32px;
@@ -126,7 +125,7 @@
   .brand { display: flex; align-items: center; color: var(--ink); pointer-events: auto; text-decoration: none; }
   .brand .logo { height: 40px; width: auto; display: block; }
   @media (max-width: 820px) { .brand .logo { height: 32px; } }
-  .hint { font: 500 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+
 
   .intro { position: fixed; left: 32px; top: 50%; transform: translateY(-50%); max-width: 360px; pointer-events: none; }
   .eyebrow { font: 500 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 14px; }
@@ -194,7 +193,6 @@
     .intro { top: 84px; transform: none; left: 16px; right: 16px; }
     .intro p { display: none; }
     header { left: 16px; right: 16px; top: 20px; }
-    .hint { display: none; }
     .cards { top: auto; bottom: 16px; right: 16px; left: 16px; width: auto; transform: none; gap: 6px; }
     .card { padding: 10px 12px; }
     .controls { display: none; }
@@ -261,8 +259,8 @@
 <path transform="matrix(1,0,0,-1,0,230)" d="M602.3 168.67C602.3 169.89 601.6 170.58 600.39 170.58H596.66V180.22L607.77 180.21C611.93 180.21 613.67 178.39 613.67 174.31L613.66 130.13C613.66 128.91 614.35 128.22 615.57 128.22L629.02 128.21C630.24 128.21 630.93 128.91 630.93 130.12V133.86L641.26 133.85V124.48C641.26 120.31 639.52 118.58 635.36 118.58H608.19C604.02 118.58 602.28 120.32 602.29 124.49L602.3 168.67Z" />
 <path transform="matrix(1,0,0,-1,0,230)" d="M671.31 146.34H672.7V146.69C672.7 153.03 670.18 155.37 664.54 155.37 662.54 155.37 658.63 154.86 658.63 152.42V150.08H648.39V154.77C648.39 163.02 660.03 163.88 664.63 163.88 679.38 163.88 683.72 156.15 683.72 146.25L683.71 129.76C683.71 128.55 684.41 127.85 685.62 127.85H689.1L689.09 118.56 679.2 118.57C675.12 118.57 673.56 120.82 673.56 123.43 673.56 124.56 673.64 125.34 673.64 125.34H673.47C673.47 125.34 670.08 117.53 660.1 117.53 652.2 117.53 645 122.48 645 131.33 645 145.22 664.1 146.35 671.31 146.34ZM662.79 126.12C668.7 126.12 672.87 132.37 672.87 137.75V138.79H670.96C665.23 138.79 656.11 138.02 656.11 131.85 656.11 128.9 658.28 126.12 662.79 126.12Z" />
 <path transform="matrix(1,0,0,-1,0,230)" d="M697.62 168.91C697.62 170.21 696.92 170.82 695.71 170.82H692.24V180.19H702.74C706.82 180.19 708.64 178.37 708.64 174.29V161.44C708.64 159.27 708.47 157.71 708.47 157.71H708.64C708.64 157.71 712.55 163.87 721.92 163.87 733.9 163.86 741.54 154.4 741.53 140.68 741.53 126.62 732.93 117.51 721.22 117.51 712.01 117.51 708.02 123.77 708.02 123.77H707.85C707.85 123.77 708.02 122.55 708.02 120.81V118.56H697.6L697.62 168.91ZM719.31 126.8C725.3 126.8 730.42 131.75 730.42 140.51 730.43 148.93 725.91 154.4 719.4 154.4 713.67 154.41 708.29 150.24 708.29 140.43 708.29 133.58 711.93 126.8 719.31 126.8Z" /></svg></a>
-  <div class="hint">← → views · scroll ↓</div>
 </header>
+
 
 <div id="projUI"><div class="pj-in">
   <h1>Every great product casts the shadow of the engineering behind it.</h1>
@@ -357,6 +355,7 @@
 </script>
 <script type="module">
 import * as THREE from 'three';
+import { initMenu } from './shared/menu.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -407,8 +406,10 @@ const ST = { b: 0, v: 0, lv: -1 };
 const PVS = { az: -90, el: 2, tx: 0, ty: 1.4, tz: 0, zoom: 0.72, dy: 0.08 };
 const PVS_ZOOM = { wide: 0.88, narrow: 1.0 };   // target filled in after load
 const STACK = [
-  ['React', '#61dafb'], ['Angular', '#dd0031'], ['Vue', '#42b883'], ['Flutter', '#02569b'], ['Node.js', '#5fa04e'],
-  ['Laravel', '#ff2d20'], ['.NET', '#512bd4'], ['Python', '#3776ab'], ['Go', '#00add8'], ['Svelte', '#ff3e00'],
+  // [name, colour (the fluid band), logo in web/logos]
+  ['React', '#61dafb', 'react'], ['Angular', '#dd0031', 'angular'], ['Vue', '#42b883', 'vue'], ['Flutter', '#02569b', 'flutter'],
+  ['Node.js', '#5fa04e', 'nodejs'], ['Laravel', '#ff2d20', 'laravel'], ['.NET', '#512bd4', 'dotnet'], ['Python', '#3776ab', 'python'],
+  ['Go', '#00add8', 'go'], ['Svelte', '#ff3e00', 'svelte'],
 ];
 // camera looking at the wall. Wide screens: copy left, image centre, box bottom-right beside it.
 // Phones (portrait): copy on top, image in the middle, box below it in front of the light's lower-right edge.
@@ -1071,10 +1072,13 @@ function setupStack(c) {
   PVS.tx = c.x; PVS.ty = c.y;
   PVS.tzW = c.z - 0.75;      // wide: the hose (at the box's mid-height) across the middle, box right
   PVS.tzN = c.z - 0.95;      // phones (rolled): hose from the top, box a little below the middle, copy underneath
-  STACK.forEach(([name, col], i) => {
+  STACK.forEach(([name, col, logo], i) => {
     const el = document.createElement('div');
     el.className = 'chip'; el.style.setProperty('--c', col);
-    el.append(document.createElement('i'), document.createTextNode(name));
+    const img = new Image();
+    img.src = `logos/${logo}.png`; img.alt = name; img.decoding = 'async';
+    img.addEventListener('load', () => { const c = chips[i]; if (c) c.w = 0; });   // re-measure once it has a size
+    el.append(img);
     chipsEl.append(el);
     chips.push({ el, t: i / STACK.length, col: new THREE.Color(col), w: 0, h: 0 });
   });
@@ -1746,7 +1750,6 @@ function buildTimeline() {
   tl = gsap.timeline({ defaults: { ease: 'none' } });
   // 0–8: hero UI out, camera blends to the deconstruct framing
   tl.to('#heroUI', { autoAlpha: 0, duration: 4, ease: 'power1.in' }, 0)
-    .to('.hint', { autoAlpha: 0, duration: 4, ease: 'power1.in' }, 0)
     .to(X, { xb: 1, duration: 10, ease: 'power2.inOut' }, 0)
     .to(X, { k: 1, duration: 70, ease: 'sine.inOut' }, 6)
     // fasteners are small: push in on the top of the cube while they unscrew, pull back for the frame
@@ -1932,7 +1935,10 @@ function goTo(view) {
 function intro() {
   Object.assign(rig, VIEWS.overview, { az: -15, el: 55, zoom: 0.55 });
   const q = new URLSearchParams(location.search);
-  const itl = gsap.timeline({ onComplete: () => { ready = true; } });
+  const itl = gsap.timeline({ onComplete: () => {
+    ready = true;
+    if (GO[hashGo]) { window.scrollTo({ top: Math.max(0, GO[hashGo]()), behavior: 'smooth' }); if (AFTER[hashGo]) setTimeout(AFTER[hashGo], 900); }
+  } });
   // the projector switches on with a flicker, then the copy comes in
   gsap.timeline({ delay: 0.5 })
     .to(PJ, { light: 0.55, duration: 0.07 }).to(PJ, { light: 0.08, duration: 0.07 })
@@ -1988,8 +1994,28 @@ function setMode(m) {
 }
 document.getElementById('modeBtn').addEventListener('click', () => { baseMode = (mode + 1) % MODES.length; setMode(baseMode); });
 
+// where each menu entry goes in the story
+const sectionY = (id, f) => { const el = document.getElementById(id); return el.offsetTop - innerHeight + el.offsetHeight * f; };
+const GO = {
+  home: () => 0,
+  about: () => sectionY('layers', 0.2),                  // our strengths
+  design: () => sectionY('layers', 0.82),                 // the interactive design layer
+  process: () => document.getElementById('hero').offsetTop + 2,
+  support: () => document.getElementById('hero').offsetTop + 2,
+  stack: () => sectionY('stack', 0.58),
+  contact: () => document.documentElement.scrollHeight - innerHeight,
+};
+const AFTER = { process: () => goTo('overview'), support: () => goTo('engine') };   // open the matching process step
+const menu = initMenu({ onGo: (go) => {
+  if (!GO[go]) return;
+  window.scrollTo({ top: Math.max(0, GO[go]()), behavior: 'smooth' });
+  if (AFTER[go]) setTimeout(AFTER[go], 900);
+} });
+// arriving from another page with index.html#about etc.
+const hashGo = location.hash.slice(1);
+
 window.addEventListener('keydown', (e) => {
-  if (inSection) return;     // inside the deconstruct section the scroll owns the camera and the mode
+  if (menu.isOpen() || inSection) return;     // inside the deconstruct section the scroll owns the camera and the mode
   const i = viewOrder.indexOf(current);
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); goTo(viewOrder[(i + 1) % viewOrder.length]); }
   if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(viewOrder[(i - 1 + viewOrder.length) % viewOrder.length]); }
