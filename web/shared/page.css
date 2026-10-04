@@ -48,4 +48,6 @@ footer { padding: clamp(56px, 6vw, 90px) var(--gut) 32px; }
 .foot a:hover { color: #fff; }
 .legal { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 56px; padding-top: 22px; border-top: 1px solid rgba(238, 246, 243, 0.15);
   font: 500 11px/1.4 "JetBrains Mono", monospace; letter-spacing: 0.04em; color: rgba(238, 246, 243, 0.5); }
+.legal a { color: inherit; }
+.legal a:hover { color: #fff; }
 
