@@ -76,6 +76,12 @@ root.innerHTML = `
   </div>`;
 
 let topicKey = 'general', lastFocus = null, tl = null, lastMail = '';
+
+// analytics: GA4 (gtag) and Clarity are loaded in each page's <head>; both calls are no-ops if they're blocked
+function track(name, params) {
+  window.gtag?.('event', name, params);
+  window.clarity?.('event', name);
+}
 const $ = (sel) => root.querySelector(sel);
 const form = $('.ct-form');
 
@@ -115,6 +121,7 @@ form.addEventListener('submit', (e) => {
   const { subject, body } = compose();
   lastMail = `To: ${TO}\nSubject: ${subject}\n\n${body}`;
   window.__contactLast = lastMail;                       // (for testing)
+  track('generate_lead', { method: 'contact_form', topic: topicKey });
   window.location.href = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   form.hidden = true; $('.ct-head').hidden = true; $('.ct-done').hidden = false;
   $('.ct-copy').focus();
@@ -127,6 +134,7 @@ $('.ct-again').addEventListener('click', () => { form.hidden = false; $('.ct-hea
 export function openContact(key, from) {
   if (!root.isConnected) document.body.append(root);
   fill(key || document.body.dataset.topic || 'general');
+  track('contact_open', { topic: topicKey });
   form.hidden = false; $('.ct-head').hidden = false; $('.ct-done').hidden = true;
   lastFocus = document.activeElement;
   root.hidden = false;
@@ -150,6 +158,7 @@ export function closeContact() {
 }
 
 $('.ct-close').addEventListener('click', closeContact);
+root.addEventListener('click', (e) => { if (e.target.closest('a[href^="mailto:"]')) track('generate_lead', { method: 'email_link', topic: topicKey }); });
 root.addEventListener('click', (e) => { if (e.target === root) closeContact(); });
 window.addEventListener('keydown', (e) => {
   if (root.hidden) return;

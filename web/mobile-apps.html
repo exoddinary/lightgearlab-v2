@@ -79,7 +79,7 @@
   .cap-list li .cog-ic { width: 16px; height: 16px; color: var(--turq); flex: none; transition: transform 0.6s; }
   .cap-list li:hover .cog-ic { transform: rotate(180deg); }
 
-  /* 5 · work: phone-shaped placeholders */
+  /* 5 · work: app screens inside phone-shaped frames */
   #work { padding: clamp(80px, 9vw, 140px) var(--gut); }
   .work-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
   .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 48px); margin-top: clamp(36px, 5vw, 64px); }
@@ -111,6 +111,25 @@
     .phones article:nth-child(2) { margin-top: 0; }
   }
 </style>
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S6Q98GJZ2K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-S6Q98GJZ2K');
+</script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "yshvwxq7xm");
+</script>
 </head>
 <body data-topic="mobile">
 
@@ -172,9 +191,9 @@
   <section id="work" class="dark">
     <div class="work-head"><h2 class="h reveal">Apps in the <em>wild.</em></h2><span class="pill">View all work <small><b>soon</b></small></span></div>
     <div class="phones">
-      <article><div class="ph-phone" style="--c:#f2c14e">App screenshot</div><h3>Project name</h3><span class="pill">iOS · Android</span></article>
-      <article><div class="ph-phone" style="--c:#3fb0a9">App screenshot</div><h3>Project name</h3><span class="pill">Cross-platform</span></article>
-      <article><div class="ph-phone" style="--c:#e9e5de">App screenshot</div><h3>Project name</h3><span class="pill">Android</span></article>
+      <article><div class="ph-phone" role="img" aria-label="Muviigrind home screen with a featured drama series" style="--c:url(work/muviigrind.jpg) center / cover"></div><h3>Muviigrind</h3><span class="pill">Short-form drama</span></article>
+      <article><div class="ph-phone" role="img" aria-label="Konflix library of interactive visual novels" style="--c:url(work/konflix.jpg) center / cover"></div><h3>Konflix</h3><span class="pill">Visual novel library</span></article>
+      <article><div class="ph-phone" role="img" aria-label="LMaps lightning tracking map for plantation assets" style="--c:url(work/lmaps.jpg) center / cover"></div><h3>LMaps</h3><span class="pill">Asset monitoring</span></article>
     </div>
   </section>
 

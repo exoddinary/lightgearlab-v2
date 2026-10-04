@@ -20,6 +20,8 @@
   .ph i { position: absolute; left: 10%; right: 10%; top: 36px; display: grid; gap: 8px; }
   .ph i::before, .ph i::after { content: ""; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.5); }
   .ph i::after { width: 60%; }
+  .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }   /* a real project shot covers the placeholder */
+  .collage .ph img { top: 22px; height: calc(100% - 22px); }   /* hero shots keep their browser bar */
 
   /* 1 · hero */
   #hero { min-height: 100vh; min-height: 100svh; padding-top: 120px; overflow: hidden; }
@@ -139,6 +141,25 @@
     .mesh .btn { top: 8%; }
   }
 </style>
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S6Q98GJZ2K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-S6Q98GJZ2K');
+</script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "yshvwxq7xm");
+</script>
 </head>
 <body data-topic="web-apps">
 
@@ -153,12 +174,12 @@
       <span>Web apps</span> <span class="o">&amp; systems</span> <span class="g"></span>
     </div>
     <div class="collage" id="collage" aria-hidden="true">
-      <div class="ph" data-label="Project shot" style="--c:#f2c14e; left:6%; top:14%; rotate:-8deg"><i></i></div>
-      <div class="ph" data-label="Project shot" style="--c:#3fb0a9; left:22%; top:46%; rotate:6deg"><i></i></div>
-      <div class="ph" data-label="Project shot" style="--c:#17443f; left:33%; top:4%; rotate:-3deg"><i></i></div>
-      <div class="ph" data-label="Project shot" style="--c:#d9d2c5; left:51%; top:42%; rotate:-6deg"><i></i></div>
-      <div class="ph" data-label="Project shot" style="--c:#0f6e68; left:57%; top:2%; rotate:7deg"><i></i></div>
-      <div class="ph" data-label="Project shot" style="--c:#f6f3ee; left:74%; top:30%; rotate:-4deg"><i></i></div>
+      <div class="ph" style="--c:#f2c14e; left:6%; top:14%; rotate:-8deg"><img src="work/samplematerialbank-desktop.jpg" alt=""></div>
+      <div class="ph" style="--c:#3fb0a9; left:22%; top:46%; rotate:6deg"><img src="work/excel-qhalif.jpg" alt=""></div>
+      <div class="ph" style="--c:#17443f; left:33%; top:4%; rotate:-3deg"><img src="work/cybersecurity.jpg" alt=""></div>
+      <div class="ph" style="--c:#d9d2c5; left:51%; top:42%; rotate:-6deg"><img src="work/samudera-wide.jpg" alt=""></div>
+      <div class="ph" style="--c:#0f6e68; left:57%; top:2%; rotate:7deg"><img src="work/prayeratlas.jpg" alt=""></div>
+      <div class="ph" style="--c:#f6f3ee; left:74%; top:30%; rotate:-4deg"><img src="work/tapaw.jpg" alt=""></div>
       <div class="spin"><svg viewBox="0 0 200 200" class="gearsvg" data-z="14"></svg><b>Scroll<br>to build</b></div>
     </div>
   </section>
@@ -186,8 +207,8 @@
   <section id="showcase" class="on-turq">
     <h2 class="h reveal">Crafted for brands that <em>move.</em></h2>
     <div class="shots">
-      <div><div class="ph parallax" data-speed="-6" data-label="Featured project · image" style="--c:#f2c14e"><i></i></div><p>Project name — web app</p></div>
-      <div><div class="ph parallax" data-speed="6" data-label="Featured project · image" style="--c:#103532"><i></i></div><p>Project name — marketing site</p></div>
+      <div><div class="ph parallax" data-speed="-6" style="--c:#f2c14e"><img src="work/samplematerialbank.jpg" alt="SampleMaterialBank material library on two phones" loading="lazy"></div><p>SampleMaterialBank — e-commerce, CMS &amp; landing page</p></div>
+      <div><div class="ph parallax" data-speed="6" style="--c:#103532"><img src="work/samudera.jpg" alt="Samudera: a sailing ship under volumetric clouds, rendered in the browser" loading="lazy"></div><p>Samudera — real-time 3D sailing in the browser</p></div>
     </div>
   </section>
 
@@ -241,10 +262,10 @@
       <span class="pill">View all work <small><b>soon</b></small></span>
     </div>
     <div class="grid">
-      <article class="card"><div class="ph" data-label="Project image" style="--c:#f2c14e"><i></i></div><h3>Project name</h3><span class="pill">Web app</span></article>
-      <article class="card"><div class="ph" data-label="Project image" style="--c:#3fb0a9"><i></i></div><h3>Project name</h3><span class="pill">Marketing site</span></article>
-      <article class="card"><div class="ph" data-label="Project image" style="--c:#e9e5de"><i></i></div><h3>Project name</h3><span class="pill">E-commerce</span></article>
-      <article class="card"><div class="ph" data-label="Project image" style="--c:#0f6e68"><i></i></div><h3>Project name</h3><span class="pill">Dashboard</span></article>
+      <article class="card"><div class="ph" style="--c:#f2c14e"><img src="work/excel-qhalif.jpg" alt="Excel Qhalif scheduler and dashboard on tablet, laptop and phone" loading="lazy"></div><h3>Excel Qhalif</h3><span class="pill">Education management</span></article>
+      <article class="card"><div class="ph" style="--c:#1d1c1a"><img src="work/cybersecurity.jpg" alt="Command-centre dashboard for monitoring threats and running automated responses" loading="lazy"></div><h3>Cybersecurity command centre</h3><span class="pill">Security automation</span></article>
+      <article class="card"><div class="ph" style="--c:#103532"><img src="work/prayeratlas.jpg" alt="PrayerAtlas: a 3D Earth showing sun position and prayer-time boundaries" loading="lazy"></div><h3>PrayerAtlas</h3><span class="pill">3D geospatial</span></article>
+      <article class="card"><div class="ph" style="--c:#f2c14e"><img src="work/tapaw.jpg" alt="Tapaw delivery website on a desktop screen" loading="lazy"></div><h3>Tapaw</h3><span class="pill">Delivery platform</span></article>
     </div>
   </section>
 
