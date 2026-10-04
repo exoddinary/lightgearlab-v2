@@ -65,6 +65,7 @@ root.innerHTML = `
         <button class="ct-send" type="submit">Send to ${TO} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         <span class="ct-alt">or email <a href="mailto:${TO}">${TO}</a></span>
       </div>
+      <p class="ct-privacy">We only use your details to reply. <a href="privacy.html">Privacy</a></p>
     </form>
     <div class="ct-done" hidden>
       <svg class="ct-done-gear" viewBox="0 0 24 24" aria-hidden="true">${COG}</svg>

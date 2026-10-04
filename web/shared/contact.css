@@ -37,6 +37,8 @@
 #contact .ct-again { background: transparent; border: 1.5px solid #1d1c1a; }
 #contact .ct-send svg { width: 16px; height: 16px; }
 #contact .ct-alt { font-size: 13px; color: #4a4743; }
+#contact .ct-privacy { font-size: 12px; color: #4a4743; }
+#contact .ct-privacy a { color: inherit; }
 #contact a { color: #0f6e68; }
 #contact .ct-done { position: relative; display: grid; gap: 16px; justify-items: start; }
 #contact .ct-done[hidden] { display: none; }
