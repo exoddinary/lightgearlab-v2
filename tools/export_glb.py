@@ -35,6 +35,19 @@ for src, prefix in SPLIT.items():
         o.data.name = o.name
     print("SPLIT", src, "->", len(parts))
 
+# side mechanism on the closed right panel (not part of engine.blend); it rides on the main panel slab
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import side_mech
+side = side_mech.build(coll)
+slab = max((o for o in coll.all_objects if o.name.startswith("PanelRight_")), key=lambda o: o.dimensions.y * o.dimensions.z)
+bpy.context.view_layer.update()
+for o in side:
+    mw = o.matrix_world.copy()
+    o.parent = slab
+    o.matrix_world = mw
+print("SIDE parent", slab.name)
+
 out = os.path.join(os.path.dirname(bpy.data.filepath), "web", "engine.glb")
 for o in vl.objects:
     o.select_set(False)

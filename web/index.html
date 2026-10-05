@@ -903,6 +903,7 @@ loader.load('engine.glb', (gltf) => {
   mixer = new THREE.AnimationMixer(model);
   clips = gltf.animations;
   gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
+  setupSide();
 
   // camera targets come from the parts themselves, so they stay right if the model changes
   const centerOf = (...names) => {
@@ -944,7 +945,7 @@ function buildPipe() {
   const back = new THREE.Box3();
   model.traverse((o) => { if (o.isMesh && /^PanelBack/.test(o.name)) back.expandByObject(o); });
   const zb = back.isEmpty() ? cubeBox.min.z : back.min.z;
-  const wx = -0.68, wy = (cubeBox.min.y + cubeBox.max.y) / 2;   // plugs into the middle of the side
+  const wx = -0.55, wy = (cubeBox.min.y + cubeBox.max.y) / 2;   // plugs into the middle of the side
   const OUT = PIPE.out = new THREE.Vector3(0, 0, -1);                     // out of the back wall
   const L = PIPE.L = new THREE.Vector3(-Math.SQRT1_2, 0, -Math.SQRT1_2);  // screen-left at the hero angle
   const g = new THREE.Group(); g.name = 'Pipe';
@@ -955,12 +956,14 @@ function buildPipe() {
 
   // flange on the wall + collar, with four bolts
   const flange = add('Pipe_Flange', new THREE.CylinderGeometry(0.24, 0.24, 0.03, 48), dark);
+  flange.userData.connector = true;     // the wall socket belongs to the box (see setupDeconstruct)
   flange.quaternion.copy(alongOut); flange.position.set(wx, wy, zb - 0.015);
   const collar = add('Pipe_Collar', new THREE.CylinderGeometry(HOSE_R + 0.03, HOSE_R + 0.03, 0.09, 40), steel);
   collar.quaternion.copy(alongOut); collar.position.set(wx, wy, zb - 0.075);
   for (let i = 0; i < 4; i++) {
     const a = Math.PI / 4 + i * Math.PI / 2;
     const b = add('Pipe_Bolt_' + i, new THREE.CylinderGeometry(0.022, 0.022, 0.025, 6), steel);
+    b.userData.connector = true;
     b.quaternion.copy(alongOut); b.position.set(wx + Math.cos(a) * 0.2, wy + Math.sin(a) * 0.2, zb - 0.04);
   }
 
@@ -1241,6 +1244,121 @@ function applyStack(dt) {
 
 }
 
+// ---------- side mechanism (tools/side_mech.py): crank gear → slotted rocker → sector → rack, on the closed right panel ----------
+// It turns 5 times per engine loop (with the crank), so it loops seamlessly with everything else.
+const SIDE = { gear: null, rocker: null, rack: null, rest: 0, act: null, recs: [], slab: null };
+const SIDE_R = 0.2, SIDE_RS = 0.264, SIDE_TURNS = 5;     // crank pin radius, sector pitch radius (match side_mech.py)
+function setupSide() {
+  SIDE.gear = model.getObjectByName('Side_Gear');
+  SIDE.rocker = model.getObjectByName('Side_Rocker');
+  SIDE.rack = model.getObjectByName('Side_Rack');
+  if (!SIDE.gear || !SIDE.rocker || !SIDE.rack) { SIDE.gear = null; return; }
+  SIDE.rest = SIDE.rack.position.z;
+  SIDE.act = mixer.clipAction(clips[0]);
+  setupHello();
+}
+// "hello" LED sign on the rack: letters in a flat warm glow (no shading, no line work) plus a soft halo around them
+const HELLO = { mesh: null, rec: null, halo: null, mat: null };
+function setupHello() {
+  const m = model.getObjectByName('Side_Hello');
+  if (!m) return;
+  HELLO.mesh = m;
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0xffd36b });
+  const rec = recs.find((r) => r.mesh === m);
+  rec.solid = glowMat; m.material = glowMat;
+  rec.edges.geometry = new THREE.BufferGeometry();    // the letters read as light, not as a drawing
+  rec.hull.geometry = new THREE.BufferGeometry();
+  m.castShadow = false;
+  HELLO.rec = rec;
+  // halo: the same word, blurred, drawn into a texture on a plane just in front of the letters (additive)
+  m.geometry.computeBoundingBox();
+  const bb = m.geometry.boundingBox, c = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
+  const W = size.z * 1.6, H = size.y * 2.0;
+  const cv = document.createElement('canvas'); cv.width = 1024; cv.height = Math.round(1024 * H / W);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  HELLO.mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.9 });
+  const halo = new THREE.Mesh(new THREE.PlaneGeometry(W, H), HELLO.mat);
+  halo.rotation.y = Math.PI / 2;                        // face +x like the letters; plane +x runs along the reading direction
+  halo.position.set(bb.max.x + 0.003, c.y, c.z);
+  halo.renderOrder = 25;
+  m.add(halo); HELLO.halo = halo;
+  const draw = () => {
+    const g = cv.getContext('2d'), px = cv.width / 1.6;           // text width in canvas px (letters = 1/1.6 of the plane)
+    g.clearRect(0, 0, cv.width, cv.height);
+    g.font = '100px Yellowtail'; const w100 = g.measureText('hello').width;
+    const fs = 100 * px / w100; g.font = `${fs}px Yellowtail`;
+    const mt = g.measureText('hello'), th = mt.actualBoundingBoxAscent + mt.actualBoundingBoxDescent;
+    const y = cv.height / 2 + (mt.actualBoundingBoxAscent - th / 2);
+    g.textAlign = 'center'; g.fillStyle = '#ffcf5a';
+    for (const [blur, alpha] of [[60, 0.55], [26, 0.7], [8, 0.8]]) { g.filter = `blur(${blur}px)`; g.globalAlpha = alpha; g.fillText('hello', cv.width / 2, y); }
+    g.filter = 'none'; g.globalAlpha = 1;
+    tex.needsUpdate = true;
+  };
+  (document.fonts ? document.fonts.load('100px Yellowtail').then(draw) : Promise.resolve(draw())).catch(draw);
+}
+function applySide() {
+  if (!SIDE.gear || !SIDE.act) return;
+  // all three share the panel as parent, so this is in the panel's frame; the panel plane is (y, z), normal +x
+  const dur = clips[0].duration, th = -2 * Math.PI * SIDE_TURNS * (SIDE.act.time % dur) / dur;
+  const G = SIDE.gear.position, P = SIDE.rocker.position;
+  const pinY = G.y + SIDE_R * Math.cos(th), pinZ = G.z + SIDE_R * Math.sin(th);
+  const a = Math.atan2(pinZ - P.z, pinY - P.y);          // the slot always points at the crank pin
+  SIDE.gear.rotation.x = th;
+  SIDE.rocker.rotation.x = a;
+  SIDE.rack.position.z = SIDE.rest - SIDE_RS * a;        // the sector rolls the rack (arc length = radius × angle)
+  if (HELLO.halo) {                                     // a gentle LED breathing, faded with the panel
+    const alpha = HELLO.rec ? HELLO.rec.a : 1;
+    HELLO.mat.opacity = alpha * (0.82 + 0.12 * Math.sin(performance.now() / 900));
+    HELLO.halo.visible = alpha > 0.003;
+  }
+}
+
+// ---------- back panel: the hose socket and a brushed-metal LightGearLab sticker ----------
+const BACK = { slab: null, recs: [], sticker: null };
+function addSticker(slab) {
+  // upper part of the back panel, near the corner it shares with the side panel (the corner nearest the camera there)
+  const W = 0.6, H = 0.19, cv = document.createElement('canvas');
+  cv.width = 1248; cv.height = Math.round(1248 * H / W);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  // brushed-metal label: a real metal material (reflects the room) plus a touch of self-light so it reads in the dark room
+  const mat = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: 0xffffff, emissiveIntensity: 0.14,
+    metalness: 0.85, roughness: 0.3, envMapIntensity: 1.4, transparent: true, polygonOffset: true, polygonOffsetFactor: -2 });
+  const st = new THREE.Mesh(new THREE.PlaneGeometry(W, H), mat);
+  st.name = 'BackSticker';
+  // world placement: back face (z = -0.88), facing out (-z); then hand it to the panel so it moves with it
+  st.position.set(0.48, 1.56, -cubeBox.max.z * 0 - 0.884);
+  st.rotation.y = Math.PI;
+  model.add(st); model.updateMatrixWorld(true); slab.attach(st);
+  BACK.sticker = st;
+  const g = cv.getContext('2d'), w = cv.width, h = cv.height, pad = h * 0.2;
+  const logo = new Image();
+  logo.onload = () => {
+    g.clearRect(0, 0, w, h);
+    const r = h * 0.16;
+    g.save(); g.beginPath(); g.roundRect(4, 4, w - 8, h - 8, r); g.clip();
+    // brushed silver: a soft sheen across, fine horizontal grain (fixed seed, so it's the same every load)
+    const sheen = g.createLinearGradient(0, 0, w, h);
+    sheen.addColorStop(0, '#c9ced2'); sheen.addColorStop(0.35, '#eef1f3'); sheen.addColorStop(0.55, '#b4bbc0'); sheen.addColorStop(1, '#dde1e4');
+    g.fillStyle = sheen; g.fillRect(0, 0, w, h);
+    let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let i = 0; i < 900; i++) {
+      const y = rnd() * h, len = w * (0.2 + rnd() * 0.8), x = rnd() * (w - len * 0.5);
+      g.strokeStyle = rnd() > 0.5 ? `rgba(255,255,255,${0.05 + rnd() * 0.12})` : `rgba(60,66,72,${0.04 + rnd() * 0.08})`;
+      g.lineWidth = 1 + rnd() * 1.5; g.beginPath(); g.moveTo(x, y); g.lineTo(x + len, y); g.stroke();
+    }
+    g.restore();
+    // bevelled edge: light along the top, shadow along the bottom
+    g.lineWidth = 6; g.strokeStyle = 'rgba(255,255,255,0.7)'; g.beginPath(); g.roundRect(6, 6, w - 12, h - 12, r); g.stroke();
+    g.lineWidth = 4; g.strokeStyle = 'rgba(40,44,48,0.35)'; g.beginPath(); g.roundRect(3, 3, w - 6, h - 6, r); g.stroke();
+    // logo printed in dark ink, with a thin highlight under it so it looks pressed into the foil
+    const lh = h - 2 * pad, lw = lh * logo.width / logo.height, lx = (w - lw) / 2;
+    g.globalAlpha = 0.55; g.filter = 'brightness(8)'; g.drawImage(logo, lx, pad + 3, lw, lh);
+    g.filter = 'none'; g.globalAlpha = 1; g.drawImage(logo, lx, pad, lw, lh);
+    tex.needsUpdate = true;
+  };
+  logo.src = 'shared/lgl_mark.svg';
+}
+
 // ---------- deconstruct: parts ----------
 // give a part its own materials so it can fade on its own (colours stay shared)
 function makeFader(r) {
@@ -1335,6 +1453,27 @@ function setupDeconstruct(C) {
     frameParts.push(r);
   });
   frameParts.sort((a, b) => a.rank - b.rank || (b.base.y - a.base.y));
+  // the side mechanism rides on its panel (it's a child of it) and fades with it
+  if (SIDE.gear) {
+    SIDE.slab = recs.find((r) => r.mesh === SIDE.gear.parent);
+    SIDE.recs = recs.filter((r) => /^Side_/.test(r.mesh.name));
+    SIDE.recs.forEach((r) => {
+      makeFader(r);
+      if (r === HELLO.rec) { r.fill = r.solid; r.mesh.material = r.solid; }   // glows in Lines mode too
+    });
+  }
+  // the hose's wall socket (flange + bolts) and the sticker live on the back panel: always on the box, and they leave
+  // with that panel in the take-apart (the hose itself still arrives, plugs in and pulls out on its own)
+  const backSlab = recs.filter((r) => /^PanelBack_/.test(r.mesh.name)).sort((a, b) => {
+    const s = (r) => { const bb = new THREE.Box3().setFromObject(r.mesh, true), v = bb.getSize(new THREE.Vector3()); return v.x * v.y; };
+    return s(b) - s(a);
+  })[0];
+  if (backSlab) {
+    BACK.slab = backSlab;
+    BACK.recs = recs.filter((r) => r.mesh.userData.connector);
+    BACK.recs.forEach((r) => { backSlab.mesh.attach(r.mesh); makeFader(r); });
+    addSticker(backSlab.mesh);
+  }
 
   // --- drivetrain: offsets along each part's own rotation / slide axis
   // [name, primary offset (world, or carrier-local for planets), start within the stage (0..1)]
@@ -1373,7 +1512,7 @@ function setupDeconstruct(C) {
   });
 
   // --- pipe: its own faders; pulled straight out of the wall, then fades
-  PIPE.recs = recs.filter((r) => /^Pipe_/.test(r.mesh.name));
+  PIPE.recs = recs.filter((r) => /^Pipe_/.test(r.mesh.name) && !r.mesh.userData.connector);
   PIPE.recs.forEach(makeFader);
   // the see-through hose keeps its glass opacity in Solid mode; bubbles keep theirs
   PIPE.recs.forEach((r) => {
@@ -1904,6 +2043,11 @@ function applyDeconstruct() {
     r.mesh.position.copy(r.base).addScaledVector(r.dir, r.dist * r.u);
     setAlpha(r, 1 - smooth((r.u - 0.42) / 0.5));
   }
+  if (SIDE.slab) for (const r of SIDE.recs) setAlpha(r, SIDE.slab.a);
+  if (BACK.slab) {
+    for (const r of BACK.recs) setAlpha(r, BACK.slab.a);
+    if (BACK.sticker) BACK.sticker.material.opacity = BACK.slab.a;
+  }
   for (const d of drive) {
     if (d.u1 === d.lu1 && d.u2 === d.lu2) continue;
     d.lu1 = d.u1; d.lu2 = d.u2;
@@ -2070,7 +2214,7 @@ function frame(dt) {
   // the drivetrain slows to ~0.35× inside the section so the exploded parts can be read
   if (mixer) mixer.update(dt * timeState.scale * mix(1, 0.35, X.xb));
   if (LY.b !== lastLY || ST.b !== lastST) { lastLY = LY.b; lastST = ST.b; PIPE.lu = -1; }
-  if (model) { applyProjection(); applyDeconstruct(); applyPalette(); }
+  if (model) { applyProjection(); applyDeconstruct(); applyPalette(); applySide(); }
   if (PIPE.group && PIPE.recs.length && PIPE.recs[0].a > 0.003) layDrops(dt * timeState.scale * PIPE.flow);
   if (PIPE.fluid) {
     const fu = PIPE.fluidMat.uniforms, a = PIPE.recs.length ? PIPE.recs[0].a : 0;
