@@ -3,6 +3,7 @@
 // hello@lightgearlab.com, subject and details filled in for that topic (a static site has no mail server; see README).
 // Loaded by shared/menu.js, so every page that has the menu has the overlay.
 
+import { sfx } from './sound.js';
 const TO = 'hello@lightgearlab.com';
 const TOPICS = {
   general: {
@@ -124,7 +125,7 @@ form.addEventListener('submit', (e) => {
   window.__contactLast = lastMail;                       // (for testing)
   track('generate_lead', { method: 'contact_form', topic: topicKey });
   window.location.href = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  form.hidden = true; $('.ct-head').hidden = true; $('.ct-done').hidden = false;
+  form.hidden = true; $('.ct-head').hidden = true; $('.ct-done').hidden = false; sfx.play('ding');
   $('.ct-copy').focus();
 });
 $('.ct-copy').addEventListener('click', async (e) => {

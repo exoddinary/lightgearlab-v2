@@ -375,6 +375,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { initMenu } from './shared/menu.js';
+import { sfx } from './shared/sound.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -1829,6 +1830,10 @@ function layoutLabels(dt) {
   for (const L of upper) layoutState.push(L);
   for (const L of lower) layoutState.push(L);
   const P = X.callouts, stg = 0.32, nt = layoutState.length, span = 1 + (nt - 1) * stg;
+  // a soft tick as each label lands (only on the way in)
+  const shown = layoutState.filter((L, i) => clamp01(P * span - i * stg) > 0.6).length;
+  if (shown > labelsShown) sfx.play('tick', 1.4);
+  labelsShown = shown;
   layoutState.forEach((L, i) => {
     const p = clamp01(P * span - i * stg);
     const draw = smooth(p / 0.7), txt = smooth((p - 0.25) / 0.6), dot = smooth((p - 0.6) / 0.3);
@@ -1843,6 +1848,7 @@ function layoutLabels(dt) {
 
 // ---------- deconstruct: scroll timeline ----------
 const EXPLODE_END = 100, TL_END = 152;   // timeline units: the exploded view is held at 100; the ending runs to 152
+let labelsShown = 0;
 const STAGES = [[0.08, 'enter'], [0.30, 'fasteners'], [0.52, 'frame'], [0.74, 'drivetrain'], [0.88, 'callouts'], [1.01, 'hold']];
 // baseMode: the look outside the projection room and the deconstruct section. Lines unless the user picks
 // another with the View button (or ?mode=); scene changes always come back to it, never to a mode caught mid-transition.
@@ -1894,7 +1900,10 @@ function buildTimeline() {
     .to('#stackUI', { autoAlpha: 0, duration: 0.1 }, 0.88)
     .to(ST, { v: 0, duration: 0.1 }, 0.9);
   // scene 01 → 02: the camera comes round from the wall to the box; the copy hands over to the hero UI
-  gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#projection', start: 'top top', end: 'bottom top', scrub: 0.6 } })
+  gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#projection', start: 'top top', end: 'bottom top', scrub: 0.6,
+    // a nudge either way completes the turn in one smooth move (the swoosh is timed to it)
+    snap: { snapTo: [0, 1], duration: { min: 1.1, max: 1.3 }, delay: 0.04, ease: 'power2.inOut', directional: true,
+      onStart: () => sfx.play('swoosh') } } })
     .to(PJ, { p: 0, duration: 0.72, ease: 'power2.inOut' }, 0)          // the turn, still in the turquoise room
     .to(PJ, { look: 0, duration: 0.22, ease: 'power1.inOut' }, 0.74)    // then the room changes to the hero look
     .to('#projUI', { autoAlpha: 0, duration: 0.28, ease: 'power1.in' }, 0)
@@ -2030,6 +2039,7 @@ function applyDeconstruct() {
     // the hose feeds in ALONG ITS OWN PATH (like a train on its track): the tip sits `tip` along the curve from the
     // wall, everything behind it follows the curve, the part between the tip and the wall isn't drawn yet
     const tip = (PIPE.len - 0.1) * slide + 0.3 * (1 - seat);        // negative for a moment = the overshoot
+    if (k > 0.97 && !PIPE.seated) { PIPE.seated = true; sfx.play('click'); } else if (k < 0.8) PIPE.seated = false;
     PIPE.flow = smooth((k - 0.9) / 0.1);
     // (hidden while the layers section visits the parts; back for "any stack", where it's the subject)
     const a = (1 - smooth((u - 0.6) / 0.4)) * smooth(k / 0.12) * (1 - LY.b * (1 - ST.b));
@@ -2103,7 +2113,7 @@ function intro() {
     if (GO[hashGo]) { window.scrollTo({ top: Math.max(0, GO[hashGo]()), behavior: 'smooth' }); if (AFTER[hashGo]) setTimeout(AFTER[hashGo], 900); }
   } });
   // the projector switches on with a flicker, then the copy comes in
-  gsap.timeline({ delay: 0.5 })
+  gsap.timeline({ delay: 0.5, onStart: () => sfx.play('projector') })
     .to(PJ, { light: 0.55, duration: 0.07 }).to(PJ, { light: 0.08, duration: 0.07 })
     .to(PJ, { light: 0.8, duration: 0.06 }).to(PJ, { light: 0.3, duration: 0.1 })
     .to(PJ, { light: 1, duration: 0.7, ease: 'power2.out' })
@@ -2210,7 +2220,10 @@ resize();
 const clock = new THREE.Clock();
 const svgEl = document.getElementById('callouts');
 let calloutsOn = false;
+let humV = 0, humY = 0;
 function frame(dt) {
+  // the engine hum follows scroll speed (a whisper at rest)
+  humV += (Math.min(1, Math.abs(scrollY - humY) / 40) - humV) * 0.05; humY = scrollY; sfx.hum(0.25 + 0.75 * humV);
   // the drivetrain slows to ~0.35× inside the section so the exploded parts can be read
   if (mixer) mixer.update(dt * timeState.scale * mix(1, 0.35, X.xb));
   if (LY.b !== lastLY || ST.b !== lastST) { lastLY = LY.b; lastST = ST.b; PIPE.lu = -1; }
